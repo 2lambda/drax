@@ -8,7 +8,7 @@ export default class System {
         this.client.send({
             jsonrpc: "2.0",
             method: methods.system.info,
-            id: this.client.id,
+            
         });
     }
 
@@ -16,7 +16,7 @@ export default class System {
         this.client.send({
             jsonrpc: "2.0",
             method: methods.system.shutdown,
-            id: this.client.id,
+            
         });
     }
 
@@ -24,7 +24,7 @@ export default class System {
         this.client.send({
             jsonrpc: "2.0",
             method: methods.system.restart,
-            id: this.client.id,
+            
         });
     }
 
@@ -67,7 +67,7 @@ export default class System {
         this.client.send({
             jsonrpc: "2.0",
             method: methods.system.stats,
-            id: this.client.id,
+            
         });
     }
 
@@ -76,7 +76,7 @@ export default class System {
             this.client.send({
                 jsonrpc: "2.0",
                 method: methods.system.sudo.info,
-                id: this.client.id,
+                
             });
         },
         /**
@@ -97,7 +97,7 @@ export default class System {
             this.client.send({
                 jsonrpc: "2.0",
                 method: methods.system.peripherals.usb,
-                id: this.client.id,
+                
             });
         },
 
@@ -105,7 +105,7 @@ export default class System {
             this.client.send({
                 jsonrpc: "2.0",
                 method: methods.system.peripherals.serial,
-                id: this.client.id,
+                
             });
         },
 
@@ -113,7 +113,7 @@ export default class System {
             this.client.send({
                 jsonrpc: "2.0",
                 method: methods.system.peripherals.video,
-                id: this.client.id,
+                
             });
         },
 
@@ -124,7 +124,7 @@ export default class System {
                 params: {
                     interface: cansocket,
                 },
-                id: this.client.id,
+                
             });
         },
     };

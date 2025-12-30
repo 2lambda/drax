@@ -12,7 +12,7 @@ export default class Server {
         this.client.send({
             jsonrpc: "2.0",
             method: methods.server.info,
-            id: this.client.id,
+            
         });
     };
 
@@ -23,7 +23,7 @@ export default class Server {
         this.client.send({
             jsonrpc: "2.0",
             method: methods.server.config,
-            id: this.client.id,
+            
         });
     };
 
@@ -42,7 +42,7 @@ export default class Server {
                 params: {
                     include_monitors: include_monitors,
                 },
-                id: this.client.id,
+                
             });
         },
         /**
@@ -57,7 +57,7 @@ export default class Server {
                     count: count,
                 },
                 ...(count !== undefined ? { params: { count } } : {}),
-                id: this.client.id,
+                
             });
         },
     };
@@ -73,7 +73,7 @@ export default class Server {
             params: {
                 application: app,
             },
-            id: this.client.id,
+            
         });
     };
 
@@ -85,7 +85,7 @@ export default class Server {
         this.client.send({
             jsonrpc: "2.0",
             method: methods.server.restart,
-            id: this.client.id,
+            
         });
     };
 

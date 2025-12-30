@@ -14,11 +14,27 @@ export default class moonrakerClient {
     public printer: Printer;
     public file: File;
     public system: System;
+    public accesspoints: {
+        ws: string,
+        http: string,
+    } = {
+        ws: "",
+        http: "",
+    }
 
+    private flush(){
+        while(this.queue.length>0){
+            const data = this.queue.shift()
+            if(data){
+                this.socket.send(JSON.stringify(data))
+            }
+        }
+    }
     send(data: object) {
         if(!this.ready){
             this.queue.push(data)
         }
+        data["id"] = this.id;
         this.socket.send(JSON.stringify(data));
     }
 
@@ -47,7 +63,7 @@ export default class moonrakerClient {
         this.ready = false;
         this.socket.close(1000, reason)
         setTimeout(()=>{ //websocket has 5 seconds to close
-            if (this.socket.readyState !== WebSocket.CLOSED){
+             if (this.socket.readyState !== WebSocket.CLOSED){
                 console.warn("[DRAX] websocket refused to close by itself, measures taken")
                 this.socket.terminate()
             }
@@ -66,10 +82,18 @@ export default class moonrakerClient {
     /**
      *
      * @param {`${string}:${number}`} host - Moonraker host, should be something like 127.0.0.1:7125
+     * @param secure - is this a secure server? if so, the rest server must be HTTPS, and the websocket server must be WSS.
      */
-    constructor(host: string) {
+    constructor(host: string, secure: boolean) {
         this.host = `${host}`;
-        this.socket = new WebSocket(`ws://${host}/websocket`);
+        if(secure){
+            this.accesspoints.ws = `wss://${this.host}/websocket`
+            this.accesspoints.http = `https://${this.host}/`
+        } else {
+            this.accesspoints.ws = `ws://${this.host}/websocket`
+            this.accesspoints.http = `http://${this.host}/`
+        }
+        this.socket = new WebSocket(!secure?`ws://${this.host}/websocket`:`wss://${this.host}/websocket`);
         this.socket.addEventListener("open", ()=>{
             this.ready = true;
         })
@@ -80,3 +104,6 @@ export default class moonrakerClient {
     }
 }
 
+
+const client = new moonrakerClient("vanilla.local:7125", false)
+client.printer.endstops()

@@ -9,14 +9,14 @@ export default class File {
                 jsonrpc: "2.0",
                 method: methods.files.list.files,
                 ...(root !== undefined ? { params: { root: root } } : {}),
-                id: this.client.id,
+                
             });
         },
         roots: () => {
             this.client.send({
                 jsonrpc: "2.0",
                 method: methods.files.list.roots,
-                id: this.client.id,
+                
             });
         },
     };
@@ -30,7 +30,7 @@ export default class File {
                     params: {
                         filename,
                     },
-                    id: this.client.id,
+                    
                 });
             },
             scan: (filename: string) => {
@@ -40,7 +40,7 @@ export default class File {
                     params: {
                         filename,
                     },
-                    id: this.client.id,
+                    
                 });
             },
         },
@@ -51,7 +51,7 @@ export default class File {
                 params: {
                     filename,
                 },
-                id: this.client.id,
+                
             });
         },
     };
@@ -64,7 +64,7 @@ export default class File {
                     path,
                     extended,
                 },
-                id: this.client.id,
+                
             })
         },
         create: (path:string)=>{
@@ -74,7 +74,7 @@ export default class File {
                 params: {
                     path
                 },
-                id: this.client.id,
+                
             })
         },
         delete: (path:string,force:boolean=false)=>{
@@ -82,7 +82,7 @@ export default class File {
                 jsonrpc: "2.0",
                 method: methods.files.directory.delete,
                 params: {path,force},
-                id: this.client.id,
+                
             })
         }
     }
@@ -92,7 +92,7 @@ export default class File {
                 jsonrpc: "2.0",
                 method: methods.files.files.copy,
                 params: {source,dest},
-                id: this.client.id,
+                
             })
         },
         move: (source: string, dest: string) => {
@@ -100,7 +100,7 @@ export default class File {
                 jsonrpc: "2.0",
                 method: methods.files.files.move,
                 params: {source,dest},
-                id: this.client.id,
+                
             })
         },
         zip: (files: string[], dest: string) => {
@@ -111,7 +111,7 @@ export default class File {
                     dest,
                     items: files
                 },
-                id: this.client.id,
+                
             })
         }
     }
@@ -132,7 +132,7 @@ export default class File {
             if (path!==undefined) {form.append("path", path)}
             if (checksum!==undefined) {form.append("checksum", checksum)}
             if (print!==undefined) {form.append("print", print?"true":"false")} //this is so stupid but i dont like seeing errors in my IDE
-            const call = fetch(`http://${this.client.host}/server/files/upload`, {method: "POST", body: form})
+            const call = fetch(`${this.client.accesspoints.http}server/files/upload`, {method: "POST", body: form})
             call.then((res) => {
                 return {
                     ok: res.ok,

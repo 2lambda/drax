@@ -54,8 +54,12 @@ export default class Auth {
     available(){
         this.client.send({
             jsonrpc: "2.0",
-
+            methods: methods.auth.list
         })
+    }
+
+    resetPassword(password: string, newPassword: string){
+
     }
 
 }
