@@ -1,15 +1,12 @@
-# drax
+# Drax
 
-To install dependencies:
+Drax is a javascript library made for interacting with moonraker (primarily with websockets). 
 
-```bash
-bun install
-```
+---
 
-To run:
+> [!CAUTION]
+> Drax is free software, distributed under the terms of the **GNU General Public License, version 3 (GPLv3)**.
+> Drax comes with **ABSOLUTELY NO WARRANTY**, to the extent permitted by applicable law.
 
-```bash
-bun run index.ts
-```
-
-This project was created using `bun init` in bun v1.3.4. [Bun](https://bun.com) is a fast all-in-one JavaScript runtime.
+For more, see §15–17 of the GNU GPL v3.
+A copy of which is in the `LICENSE` file.

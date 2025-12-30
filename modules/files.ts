@@ -116,12 +116,12 @@ export default class File {
         }
     }
     file = {
-        download: async (root:string, filename: string): Promise<string> => {
+        download: async (root:string, filename: string): Promise<Blob> => {
             try {
                 const res = await fetch(`http://${this.client.host}/server/files/${root}/${filename}`, {method: "GET"})
-                return await res.text();
+                return await res.blob();
             } catch (e) {
-                throw new Error(`Error, ${e}`)
+                throw new Error(`Error\n${e}`)
             }
 
         },
