@@ -142,7 +142,8 @@ export default class moonrakerClient {
              * @internal
              */
             debug?: boolean;
-        }) {
+        },
+    ) {
         if (options?.debug) {
             this.debug = true;
         }
@@ -173,19 +174,21 @@ export default class moonrakerClient {
             if (pending) {
                 pending.resolve(data);
             }
-            if (this.debug&&data.id){
-                console.log(`moonraker has sent a message`)
+            if (this.debug && data.id) {
+                console.log(`moonraker has sent a message`);
             }
         });
     }
 }
 
-const client = new moonrakerClient("vanilla.local:7125", false, {debug: true});
+const client = new moonrakerClient("vanilla.local:7125", false, {
+    debug: true,
+});
 const a = await client.server.identify(
     "drax",
     "beta",
     "other",
     "https://github.com/2lambda/drax/tree/main",
 );
-const x = await client.printer.list()
+const x = await client.printer.list();
 console.log(a, x);
