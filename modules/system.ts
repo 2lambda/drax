@@ -97,8 +97,7 @@ export default class System {
             this.client.send({
                 jsonrpc: "2.0",
                 method: methods.system.peripherals.usb,
-                
-            });
+            })
         },
 
         serial: () => {
