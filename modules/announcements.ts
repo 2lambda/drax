@@ -38,7 +38,7 @@ export default class Announcement {
                 params: { name },
             });
         },
-        delete: (name: string) => {
+        remove: (name: string) => {
             return this.client.send({
                 method: methods.announcement.feeds.remove,
                 params: { name },
