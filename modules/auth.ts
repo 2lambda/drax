@@ -1,5 +1,5 @@
 import moonrakerClient from "../index.ts";
-import methods from "../util/methods.ts";
+import methods from "../util/constants.ts";
 export default class Auth {
     constructor(private client: moonrakerClient) {}
 

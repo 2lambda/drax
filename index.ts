@@ -7,6 +7,13 @@ import type { request } from "./util/types";
 //todo users need to use await in their functions
 
 export default class moonrakerClient {
+    /**
+     * debug
+     * will turn on extra messages
+     * @internal
+     * @private
+     */
+    private debug = false;
     /** @internal */
     socket: WebSocket;
     /** @internal */
@@ -54,7 +61,6 @@ export default class moonrakerClient {
                     res();
                 });
             }
-            console.log("good to go");
         });
     }
 
@@ -126,8 +132,20 @@ export default class moonrakerClient {
      *
      * @param {`${string}:${number}`} host - Moonraker host, should be something like 127.0.0.1:7125
      * @param secure - is this a secure server? if so, the rest server must be HTTPS, and the websocket server must be WSS.
+     * @param options - extra options
      */
-    constructor(host: string, secure: boolean = false) {
+    constructor(
+        host: string,
+        secure: boolean = false,
+        options?: {
+            /**
+             * @internal
+             */
+            debug?: boolean;
+        }) {
+        if (options?.debug) {
+            this.debug = true;
+        }
         this.host = `${host}`;
         this.accesspoints.ws = secure
             ? `wss://${this.host}/websocket`
@@ -135,6 +153,7 @@ export default class moonrakerClient {
         this.accesspoints.http = secure
             ? `https://${this.host}/`
             : `http://${this.host}`;
+        console.log(`connecting to ${this.accesspoints.ws}`);
         this.socket = new WebSocket(
             !secure
                 ? `ws://${this.host}/websocket`
@@ -142,7 +161,7 @@ export default class moonrakerClient {
         );
         this.socket.addEventListener("open", () => {
             this.ready = true;
-            console.log("ready");
+            console.log(`connected to moonraker`);
         });
         this.server = new Server(this);
         this.printer = new Printer(this);
@@ -154,16 +173,19 @@ export default class moonrakerClient {
             if (pending) {
                 pending.resolve(data);
             }
+            if (this.debug&&data.id){
+                console.log(`moonraker has sent a message`)
+            }
         });
     }
 }
 
-const client = new moonrakerClient("vanilla.local:7125", false);
+const client = new moonrakerClient("vanilla.local:7125", false, {debug: true});
 const a = await client.server.identify(
     "drax",
     "beta",
     "other",
     "https://github.com/2lambda/drax/tree/main",
 );
-
-console.log(a);
+const x = await client.printer.list()
+console.log(a, x);

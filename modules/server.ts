@@ -1,4 +1,4 @@
-import methods from "../util/methods.ts";
+import methods from "../util/constants.ts";
 import moonrakerClient from "../index.ts";
 import type { appType } from "../util/types.ts";
 

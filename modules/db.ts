@@ -4,7 +4,7 @@
 //! SEE README.MD'S Important SECTION FOR MORE INFORMATION
 //! IMPORTANT
 import moonrakerClient from "../index.ts";
-import methods from "../util/methods.ts";
+import methods from "../util/constants.ts";
 export default class File {
     constructor(private client: moonrakerClient) {}
     list() {

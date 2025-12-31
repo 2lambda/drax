@@ -292,4 +292,5 @@ const methods = {
         },
     },
 } as const;
+
 export default methods;
