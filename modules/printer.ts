@@ -6,7 +6,7 @@ export default class Printer {
      * Emergency stop printer
      */
     stop() {
-        this.client.send({
+        return this.client.send({
             jsonrpc: "2.0",
             method: methods.printer.stop,
             
@@ -17,7 +17,7 @@ export default class Printer {
      * Soft restart klipper
      */
     hostRestart() {
-        this.client.send({
+        return this.client.send({
             jsonrpc: "2.0",
             method: methods.printer.restart,
             id: this.client.id
@@ -28,7 +28,7 @@ export default class Printer {
      * Restart klipper's firmware
      */
     fwRestart() {
-        this.client.send({
+        return this.client.send({
             jsonrpc: "2.0",
             method: methods.printer.firmwareRestart,
             
@@ -40,7 +40,7 @@ export default class Printer {
      */
 
     list() {
-        this.client.send({
+        return this.client.send({
             jsonrpc: "2.0",
             method: methods.printer.objects.list,
             
@@ -52,7 +52,7 @@ export default class Printer {
      * @param objs
      */
     query(objs: Record<string, string[]>) {
-        this.client.send({
+        return this.client.send({
             jsonrpc: "2.0",
             method: methods.printer.objects.query,
             params: {
@@ -67,7 +67,7 @@ export default class Printer {
      * @param objs
      */
     subscribe(objs: Record<string, string[]>) {
-        this.client.send({
+        return this.client.send({
             jsonrpc: "2.0",
             method: methods.printer.objects.subscribe,
             params: {
@@ -78,7 +78,7 @@ export default class Printer {
     }
 
     endstops() {
-        this.client.send({
+        return this.client.send({
             jsonrpc: "2.0",
             method: methods.printer.endstops,
             
@@ -87,7 +87,7 @@ export default class Printer {
 
     gcode = {
         run: (gcode: string) => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.printer.gcode.run,
                 params: {
@@ -98,7 +98,7 @@ export default class Printer {
         },
 
         help: () => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.printer.gcode.help,
                 
@@ -108,7 +108,7 @@ export default class Printer {
 
     job = {
         start: (name: string) => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.printer.job.start,
                 params: {
@@ -119,7 +119,7 @@ export default class Printer {
         },
 
         pause: () => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.printer.job.pause,
                 
@@ -127,7 +127,7 @@ export default class Printer {
         },
 
         resume: () => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.printer.job.resume,
                 
@@ -135,7 +135,7 @@ export default class Printer {
         },
 
         cancel: () => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.printer.job.cancel,
                 

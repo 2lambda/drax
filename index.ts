@@ -3,8 +3,8 @@ import Printer from "./modules/printer.ts";
 import Server from "./modules/server.ts";
 import System from "./modules/system.ts";
 import {rng} from "./util/functions.ts";
-import {resolve} from "bun";
-
+import type {request} from "./util/types";
+//todo users need to use await in their functions
 
 export default class moonrakerClient {
     /** @internal */
@@ -57,10 +57,19 @@ export default class moonrakerClient {
         })
     }
 
-    async send(data: object) {
+    /**
+     * send data
+     * @param data
+     */
+
+    async send(data: request) {
         await this.onReady()
         const id = this.id();
-        data["id"] = id;
+        const message = {
+            jsonrpc: "2.0",
+            id,
+            ...data
+        }
         this.socket.send(JSON.stringify(data));
 
         return new Promise((resolve, reject) => {
@@ -69,7 +78,7 @@ export default class moonrakerClient {
     }
 
     /**
-     * give socket identification number
+     * give socket id number
      */
     id = () => {
         let x : number;
@@ -118,14 +127,7 @@ export default class moonrakerClient {
     constructor(host: string, secure: boolean = false) {
         this.host = `${host}`;
         this.accesspoints.ws = secure?`wss://${this.host}/websocket`:`ws://${this.host}/websocket`;
-
-        if(secure){
-            this.accesspoints.ws = `wss://${this.host}/websocket`
-            this.accesspoints.http = `https://${this.host}/`
-        } else {
-            this.accesspoints.ws = `ws://${this.host}/websocket`
-            this.accesspoints.http = `http://${this.host}/`
-        }
+        this.accesspoints.http = secure?`https://${this.host}/`:`http://${this.host}`;
         this.socket = new WebSocket(!secure?`ws://${this.host}/websocket`:`wss://${this.host}/websocket`);
         this.socket.addEventListener("open", ()=>{
             this.ready = true;
@@ -136,15 +138,10 @@ export default class moonrakerClient {
         this.file = new File(this);
         this.system = new System(this);
         this.socket.addEventListener("message", (message)=>{
-            const data = message.data;
-            console.log(data)
+            const data = JSON.parse(message.data);
             const pending =  this.pending.get(data.id);
-            if (pending){
-                if (data.error){
-                    pending.reject(data.error);
-                } else {
-                    pending.resolve(data);
-                }
+            if(pending){
+                pending.resolve(data)
             }
         })
     }
@@ -152,6 +149,6 @@ export default class moonrakerClient {
 
 
 const client = new moonrakerClient("vanilla.local:7125", false)
-const x = await client.system.peripherals.usb()
-console.warn(`pay attention ${x}`)
-console.log(JSON.stringify(x))
+const a = await client.server.identify("drax", "beta", "other", "https://github.com/2lambda/drax/tree/main")
+
+console.log(a)

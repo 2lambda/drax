@@ -5,7 +5,7 @@ export default class File {
 
     list = {
         files: (root?: string) => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.files.list.files,
                 ...(root !== undefined ? { params: { root: root } } : {}),
@@ -13,7 +13,7 @@ export default class File {
             });
         },
         roots: () => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.files.list.roots,
                 
@@ -24,7 +24,7 @@ export default class File {
     gcode = {
         metadata: {
             get: (filename: string) => {
-                this.client.send({
+                return this.client.send({
                     jsonrpc: "2.0",
                     method: methods.files.metadata.get,
                     params: {
@@ -34,7 +34,7 @@ export default class File {
                 });
             },
             scan: (filename: string) => {
-                this.client.send({
+                return this.client.send({
                     jsonrpc: "2.0",
                     method: methods.files.metadata.scan,
                     params: {
@@ -45,7 +45,7 @@ export default class File {
             },
         },
         thumbnail: (filename: string) => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.files.metadata.get,
                 params: {
@@ -57,7 +57,7 @@ export default class File {
     };
     directory = {
         info: (path:string="gcodes", extended:boolean=true) => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.files.directory.get,
                 params: {
@@ -68,7 +68,7 @@ export default class File {
             })
         },
         create: (path:string)=>{
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.files.directory.create,
                 params: {
@@ -78,7 +78,7 @@ export default class File {
             })
         },
         delete: (path:string,force:boolean=false)=>{
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.files.directory.delete,
                 params: {path,force},
@@ -88,7 +88,7 @@ export default class File {
     }
     items = {
         copy: (source: string, dest: string) => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.files.files.copy,
                 params: {source,dest},
@@ -96,7 +96,7 @@ export default class File {
             })
         },
         move: (source: string, dest: string) => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.files.files.move,
                 params: {source,dest},
@@ -104,7 +104,7 @@ export default class File {
             })
         },
         zip: (files: string[], dest: string) => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.files.files.zip,
                 params: {

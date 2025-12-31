@@ -6,3 +6,8 @@ export type appType =
     | "bot"
     | "agent"
     | "other";
+
+export type request = {
+    method: string;
+    params?: unknown;
+}

@@ -9,7 +9,7 @@ export default class Server {
      * Get information about the server
      */
     info = () => {
-        this.client.send({
+        return this.client.send({
             jsonrpc: "2.0",
             method: methods.server.info,
             
@@ -20,7 +20,7 @@ export default class Server {
      * Get moonraker.conf (or cfg, im not sure which it is)
      */
     config = () => {
-        this.client.send({
+        return this.client.send({
             jsonrpc: "2.0",
             method: methods.server.config,
             
@@ -36,7 +36,7 @@ export default class Server {
          * @param include_monitors - Im not sure
          */
         temperature: (include_monitors: boolean = false) => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.server.cached.temperature,
                 params: {
@@ -50,7 +50,7 @@ export default class Server {
          * @param count  	The number of cached gcode responses to return. The default is to return all cached items.
          */
         gcode: (count?: number) => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.server.cached.gcode,
                 params: {
@@ -67,7 +67,7 @@ export default class Server {
      * @param app
      */
     rollover = (app: "moonraker" | "klipper" | "all" = "all") => {
-        this.client.send({
+        return this.client.send({
             jsonrpc: "2.0",
             method: methods.server.rollover,
             params: {
@@ -82,7 +82,7 @@ export default class Server {
      *
      */
     restart = () => {
-        this.client.send({
+        return this.client.send({
             jsonrpc: "2.0",
             method: methods.server.restart,
             
@@ -106,7 +106,7 @@ export default class Server {
         token?: string /** */,
         key?: string,
     ) => {
-        this.client.send({
+        return this.client.send({
             jsonrpc: "2.0",
             method: methods.server.id,
             params: {

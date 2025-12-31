@@ -4,7 +4,7 @@ export default class Auth {
     constructor(private client: moonrakerClient) {}
 
     login(username: string, password: string, source?: string) {
-        this.client.send({
+        return this.client.send({
             jsonrpc: "2.0",
             method: methods.auth.login,
             params: {
@@ -16,14 +16,14 @@ export default class Auth {
 
 
     logout() {
-        this.client.send({
+        return this.client.send({
             jsonrpc: "2.0",
             method: methods.auth.logout
         })
     }
 
     getuser(){
-        this.client.send({
+        return this.client.send({
             jsonrpc: "2.0",
             method: methods.auth.user.current
         })
@@ -31,7 +31,7 @@ export default class Auth {
 
     usermod = {
         create: (username: string, password: string) => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.auth.manage.create,
                 params: {
@@ -41,7 +41,7 @@ export default class Auth {
         },
 
         delete: (username: string) => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.auth.manage.create,
                 params: {
@@ -52,7 +52,7 @@ export default class Auth {
     }
 
     available(){
-        this.client.send({
+        return this.client.send({
             jsonrpc: "2.0",
             methods: methods.auth.list
         })

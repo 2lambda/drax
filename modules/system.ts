@@ -5,7 +5,7 @@ export default class System {
     constructor(private client: moonrakerClient) {}
 
     info() {
-        this.client.send({
+        return this.client.send({
             jsonrpc: "2.0",
             method: methods.system.info,
             
@@ -13,7 +13,7 @@ export default class System {
     }
 
     shutdown() {
-        this.client.send({
+        return this.client.send({
             jsonrpc: "2.0",
             method: methods.system.shutdown,
             
@@ -21,7 +21,7 @@ export default class System {
     }
 
     restart() {
-        this.client.send({
+        return this.client.send({
             jsonrpc: "2.0",
             method: methods.system.restart,
             
@@ -33,7 +33,7 @@ export default class System {
      */
     service = {
         restart: (svc: string) => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.system.service.restart,
                 params: {
@@ -43,7 +43,7 @@ export default class System {
         },
 
         stop: (svc: string) => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.system.service.stop,
                 params: {
@@ -53,7 +53,7 @@ export default class System {
         },
 
         start: (svc: string) => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.system.service.start,
                 params: {
@@ -64,7 +64,7 @@ export default class System {
     };
 
     statistics() {
-        this.client.send({
+        return this.client.send({
             jsonrpc: "2.0",
             method: methods.system.stats,
             
@@ -73,7 +73,7 @@ export default class System {
 
     sudo = {
         info: () => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.system.sudo.info,
                 
@@ -84,7 +84,7 @@ export default class System {
          * @param set
          */
         password: (set: string) => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.system.sudo.password,
                 params: { password: set },
@@ -94,14 +94,14 @@ export default class System {
 
     peripherals = {
         usb: () => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.system.peripherals.usb,
             })
         },
 
         serial: () => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.system.peripherals.serial,
                 
@@ -109,7 +109,7 @@ export default class System {
         },
 
         video: () => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.system.peripherals.video,
                 
@@ -117,7 +117,7 @@ export default class System {
         },
 
         canbus: (cansocket: string) => {
-            this.client.send({
+            return this.client.send({
                 jsonrpc: "2.0",
                 method: methods.system.peripherals.canbus,
                 params: {

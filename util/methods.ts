@@ -155,7 +155,7 @@ const methods = {
         },
     },
     database: {
-        info: "server.database.list",
+        list: "server.database.list",
         item: {
             get: "server.database.get_item",
             create: "server.database.post_item",
@@ -169,7 +169,7 @@ const methods = {
                 restore: "server.database.restore",
             },
         },
-        DEBUG: {
+        debug: {
             //i think i should remove this, not sure though.
             list: "debug.database.list",
             get: "debug.database.get_item",

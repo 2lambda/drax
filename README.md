@@ -4,6 +4,8 @@ Drax is a javascript library made for interacting with moonraker (primarily with
 
 ---
 
+# Important
+
 > [!CAUTION]
 > Drax is free software, distributed under the terms of the **GNU General Public License, version 3 (GPLv3)**.
 > Drax comes with **ABSOLUTELY NO WARRANTY**, to the extent permitted by applicable law.
