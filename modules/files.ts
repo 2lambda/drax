@@ -6,17 +6,13 @@ export default class File {
     list = {
         files: (root?: string) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.files.list.files,
                 ...(root !== undefined ? { params: { root: root } } : {}),
-                
             });
         },
         roots: () => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.files.list.roots,
-                
             });
         },
     };
@@ -25,120 +21,121 @@ export default class File {
         metadata: {
             get: (filename: string) => {
                 return this.client.send({
-                    jsonrpc: "2.0",
                     method: methods.files.metadata.get,
                     params: {
                         filename,
                     },
-                    
                 });
             },
             scan: (filename: string) => {
                 return this.client.send({
-                    jsonrpc: "2.0",
                     method: methods.files.metadata.scan,
                     params: {
                         filename,
                     },
-                    
                 });
             },
         },
         thumbnail: (filename: string) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.files.metadata.get,
                 params: {
                     filename,
                 },
-                
             });
         },
     };
     directory = {
-        info: (path:string="gcodes", extended:boolean=true) => {
+        info: (path: string = "gcodes", extended: boolean = true) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.files.directory.get,
                 params: {
                     path,
                     extended,
                 },
-                
-            })
+            });
         },
-        create: (path:string)=>{
+        create: (path: string) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.files.directory.create,
                 params: {
-                    path
+                    path,
                 },
-                
-            })
+            });
         },
-        delete: (path:string,force:boolean=false)=>{
+        delete: (path: string, force: boolean = false) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.files.directory.delete,
-                params: {path,force},
-                
-            })
-        }
-    }
+                params: { path, force },
+            });
+        },
+    };
     items = {
         copy: (source: string, dest: string) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.files.files.copy,
-                params: {source,dest},
-                
-            })
+                params: { source, dest },
+            });
         },
         move: (source: string, dest: string) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.files.files.move,
-                params: {source,dest},
-                
-            })
+                params: { source, dest },
+            });
         },
         zip: (files: string[], dest: string) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.files.files.zip,
                 params: {
                     dest,
-                    items: files
+                    items: files,
                 },
-                
-            })
-        }
-    }
+            });
+        },
+    };
     file = {
-        download: async (root:string, filename: string): Promise<Blob> => {
+        download: async (root: string, filename: string): Promise<Blob> => {
             try {
-                const res = await fetch(`http://${this.client.host}/server/files/${root}/${filename}`, {method: "GET"})
+                const res = await fetch(
+                    `http://${this.client.host}/server/files/${root}/${filename}`,
+                    { method: "GET" },
+                );
                 return await res.blob();
             } catch (e) {
-                throw new Error(`Error\n${e}`)
+                throw new Error(`Error\n${e}`);
             }
-
         },
-        upload: (file: Blob, root?: string, path?: string, checksum?: string, print?: boolean) => {
-            const form = new FormData()
-            form.append("file", file)
-            if (root!==undefined) {form.append("root", root)}
-            if (path!==undefined) {form.append("path", path)}
-            if (checksum!==undefined) {form.append("checksum", checksum)}
-            if (print!==undefined) {form.append("print", print?"true":"false")} //this is so stupid but i dont like seeing errors in my IDE
-            const call = fetch(`${this.client.accesspoints.http}server/files/upload`, {method: "POST", body: form})
+        upload: (
+            file: Blob,
+            root?: string,
+            path?: string,
+            checksum?: string,
+            print?: boolean,
+        ) => {
+            const form = new FormData();
+            form.append("file", file);
+            if (root !== undefined) {
+                form.append("root", root);
+            }
+            if (path !== undefined) {
+                form.append("path", path);
+            }
+            if (checksum !== undefined) {
+                form.append("checksum", checksum);
+            }
+            if (print !== undefined) {
+                form.append("print", print ? "true" : "false");
+            } //this is so stupid but i dont like seeing errors in my IDE
+            const call = fetch(
+                `${this.client.accesspoints.http}server/files/upload`,
+                { method: "POST", body: form },
+            );
             call.then((res) => {
                 return {
                     ok: res.ok,
                     data: res.json,
-                }
-            })
-        }
-    }
+                };
+            });
+        },
+    };
 }

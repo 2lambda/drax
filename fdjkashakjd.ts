@@ -1,3 +1,3 @@
 import moonrakerClient from "./index";
-const x = new moonrakerClient()
-x.host
+const x = new moonrakerClient();
+x.host;

@@ -4,12 +4,8 @@ export default class Job {
     constructor(private client: moonrakerClient) {}
     queue = {
         status: () => {
-            return this.client.send({
-                jsonrpc: "2.0",
-            })
-        }
-    }
-    history = {
-
-    }
+            return this.client.send({});
+        },
+    };
+    history = {};
 }

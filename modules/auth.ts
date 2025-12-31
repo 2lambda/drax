@@ -5,64 +5,53 @@ export default class Auth {
 
     login(username: string, password: string, source?: string) {
         return this.client.send({
-            jsonrpc: "2.0",
             method: methods.auth.login,
             params: {
-                username, password,
-                ...(source!==undefined? {source}:{})
-            }
-        })
+                username,
+                password,
+                ...(source !== undefined ? { source } : {}),
+            },
+        });
     }
-
 
     logout() {
         return this.client.send({
-            jsonrpc: "2.0",
-            method: methods.auth.logout
-        })
+            method: methods.auth.logout,
+        });
     }
 
-    getuser(){
+    getuser() {
         return this.client.send({
-            jsonrpc: "2.0",
-            method: methods.auth.user.current
-        })
+            method: methods.auth.user.current,
+        });
     }
 
     usermod = {
         create: (username: string, password: string) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.auth.manage.create,
                 params: {
-                    username, password
-                }
-            })
+                    username,
+                    password,
+                },
+            });
         },
 
         delete: (username: string) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.auth.manage.create,
                 params: {
-                    username
-                }
-            })
-        }
-    }
+                    username,
+                },
+            });
+        },
+    };
 
-    available(){
+    available() {
         return this.client.send({
-            jsonrpc: "2.0",
-            methods: methods.auth.list
-        })
+            methods: methods.auth.list,
+        });
     }
 
-    resetPassword(password: string, newPassword: string){
-
-    }
-
+    resetPassword(password: string, newPassword: string) {}
 }
-
-
-

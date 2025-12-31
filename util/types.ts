@@ -10,4 +10,4 @@ export type appType =
 export type request = {
     method: string;
     params?: unknown;
-}
+};

@@ -1,3 +1,3 @@
-export function rng(max: number,min: number){
+export function rng(max: number, min: number) {
     return Math.round(Math.random() * (max - min)) + min;
 }

@@ -2,8 +2,8 @@ import File from "./modules/files.ts";
 import Printer from "./modules/printer.ts";
 import Server from "./modules/server.ts";
 import System from "./modules/system.ts";
-import {rng} from "./util/functions.ts";
-import type {request} from "./util/types";
+import { rng } from "./util/functions.ts";
+import type { request } from "./util/types";
 //todo users need to use await in their functions
 
 export default class moonrakerClient {
@@ -18,11 +18,13 @@ export default class moonrakerClient {
     /**
      * @internal
      */
-    private pending = new Map<number, {
-        resolve: (data: any) => void;
-        reject: (reason: any) => void;
-    }>
-
+    private pending = new Map<
+        number,
+        {
+            resolve: (data: any) => void;
+            reject: (reason: any) => void;
+        }
+    >();
 
     public server: Server;
     public printer: Printer;
@@ -30,31 +32,30 @@ export default class moonrakerClient {
     public system: System;
     /** @internal */
     public accesspoints: {
-        ws: string,
-        http: string,
+        ws: string;
+        http: string;
     } = {
         ws: "",
         http: "",
-    }
+    };
 
     /**
      * @private
      */
     /***************/
 
-
     /***********/
     private onReady(): Promise<void> {
-        return new Promise(res => {
-            if(this.ready){
-                res()
-            }else{
-                this.socket.addEventListener("open", ()=>{
-                    res()
-                })
+        return new Promise((res) => {
+            if (this.ready) {
+                res();
+            } else {
+                this.socket.addEventListener("open", () => {
+                    res();
+                });
             }
-            console.log("good to go")
-        })
+            console.log("good to go");
+        });
     }
 
     /**
@@ -63,31 +64,30 @@ export default class moonrakerClient {
      */
 
     async send(data: request) {
-        await this.onReady()
+        await this.onReady();
         const id = this.id();
         const message = {
-            jsonrpc: "2.0",
             id,
-            ...data
-        }
+            ...data,
+        };
         this.socket.send(JSON.stringify(data));
 
         return new Promise((resolve, reject) => {
-            this.pending.set(id, {resolve, reject})
-        })
+            this.pending.set(id, { resolve, reject });
+        });
     }
 
     /**
      * give socket id number
      */
     id = () => {
-        let x : number;
-        if (this.used.size>=9999-5){
-            console.warn("[DRAX] overflow of ids\n[DRAX] reinitalizing ws")
-            this.rebase("all out of ids :(")
+        let x: number;
+        if (this.used.size >= 9999 - 5) {
+            console.warn("[DRAX] overflow of ids\n[DRAX] reinitalizing ws");
+            this.rebase("all out of ids :(");
         }
         do {
-            x = rng(5,9999)
+            x = rng(5, 9999);
         } while (this.used.has(x));
         this.used.add(x);
         return x;
@@ -98,25 +98,28 @@ export default class moonrakerClient {
      * @param time
      * @private
      */
-    private eightysix(reason: string, time: number){
+    private eightysix(reason: string, time: number) {
         this.ready = false;
-        this.socket.close(1000, reason)
-        setTimeout(()=>{ //websocket has 5 seconds to close
-             if (this.socket.readyState !== WebSocket.CLOSED){
-                console.warn("[DRAX] websocket refused to close by itself, measures taken")
-                this.socket.terminate() // code editors say this will error, it will not
+        this.socket.close(1000, reason);
+        setTimeout(() => {
+            //websocket has 5 seconds to close
+            if (this.socket.readyState !== WebSocket.CLOSED) {
+                console.warn(
+                    "[DRAX] websocket refused to close by itself, measures taken",
+                );
+                this.socket.terminate(); // code editors say this will error, it will not
             }
-        },time*1000)
+        }, time * 1000);
     }
     /**
      * Reinit websocket
      * @param reason
      * @private
      */
-    private rebase(reason: string){
-        this.eightysix(reason, 5)
-        this.used.clear()
-        this.pending.clear()
+    private rebase(reason: string) {
+        this.eightysix(reason, 5);
+        this.used.clear();
+        this.pending.clear();
         this.socket = new WebSocket(`ws://${this.host}/websocket`);
     }
     /**
@@ -126,29 +129,41 @@ export default class moonrakerClient {
      */
     constructor(host: string, secure: boolean = false) {
         this.host = `${host}`;
-        this.accesspoints.ws = secure?`wss://${this.host}/websocket`:`ws://${this.host}/websocket`;
-        this.accesspoints.http = secure?`https://${this.host}/`:`http://${this.host}`;
-        this.socket = new WebSocket(!secure?`ws://${this.host}/websocket`:`wss://${this.host}/websocket`);
-        this.socket.addEventListener("open", ()=>{
+        this.accesspoints.ws = secure
+            ? `wss://${this.host}/websocket`
+            : `ws://${this.host}/websocket`;
+        this.accesspoints.http = secure
+            ? `https://${this.host}/`
+            : `http://${this.host}`;
+        this.socket = new WebSocket(
+            !secure
+                ? `ws://${this.host}/websocket`
+                : `wss://${this.host}/websocket`,
+        );
+        this.socket.addEventListener("open", () => {
             this.ready = true;
-            console.log("ready")
-        })
+            console.log("ready");
+        });
         this.server = new Server(this);
         this.printer = new Printer(this);
         this.file = new File(this);
         this.system = new System(this);
-        this.socket.addEventListener("message", (message)=>{
+        this.socket.addEventListener("message", (message) => {
             const data = JSON.parse(message.data);
-            const pending =  this.pending.get(data.id);
-            if(pending){
-                pending.resolve(data)
+            const pending = this.pending.get(data.id);
+            if (pending) {
+                pending.resolve(data);
             }
-        })
+        });
     }
 }
 
+const client = new moonrakerClient("vanilla.local:7125", false);
+const a = await client.server.identify(
+    "drax",
+    "beta",
+    "other",
+    "https://github.com/2lambda/drax/tree/main",
+);
 
-const client = new moonrakerClient("vanilla.local:7125", false)
-const a = await client.server.identify("drax", "beta", "other", "https://github.com/2lambda/drax/tree/main")
-
-console.log(a)
+console.log(a);

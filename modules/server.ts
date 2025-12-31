@@ -1,6 +1,6 @@
 import methods from "../util/methods.ts";
 import moonrakerClient from "../index.ts";
-import type {appType} from "../util/types.ts";
+import type { appType } from "../util/types.ts";
 
 export default class Server {
     constructor(private client: moonrakerClient) {}
@@ -10,9 +10,7 @@ export default class Server {
      */
     info = () => {
         return this.client.send({
-            jsonrpc: "2.0",
             method: methods.server.info,
-            
         });
     };
 
@@ -21,9 +19,7 @@ export default class Server {
      */
     config = () => {
         return this.client.send({
-            jsonrpc: "2.0",
             method: methods.server.config,
-            
         });
     };
 
@@ -37,12 +33,10 @@ export default class Server {
          */
         temperature: (include_monitors: boolean = false) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.server.cached.temperature,
                 params: {
                     include_monitors: include_monitors,
                 },
-                
             });
         },
         /**
@@ -51,13 +45,11 @@ export default class Server {
          */
         gcode: (count?: number) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.server.cached.gcode,
                 params: {
                     count: count,
                 },
                 ...(count !== undefined ? { params: { count } } : {}),
-                
             });
         },
     };
@@ -68,12 +60,10 @@ export default class Server {
      */
     rollover = (app: "moonraker" | "klipper" | "all" = "all") => {
         return this.client.send({
-            jsonrpc: "2.0",
             method: methods.server.rollover,
             params: {
                 application: app,
             },
-            
         });
     };
 
@@ -83,9 +73,7 @@ export default class Server {
      */
     restart = () => {
         return this.client.send({
-            jsonrpc: "2.0",
             method: methods.server.restart,
-            
         });
     };
 
@@ -107,7 +95,6 @@ export default class Server {
         key?: string,
     ) => {
         return this.client.send({
-            jsonrpc: "2.0",
             method: methods.server.id,
             params: {
                 client_name: name,

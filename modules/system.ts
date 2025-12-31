@@ -6,25 +6,19 @@ export default class System {
 
     info() {
         return this.client.send({
-            jsonrpc: "2.0",
             method: methods.system.info,
-            
         });
     }
 
     shutdown() {
         return this.client.send({
-            jsonrpc: "2.0",
             method: methods.system.shutdown,
-            
         });
     }
 
     restart() {
         return this.client.send({
-            jsonrpc: "2.0",
             method: methods.system.restart,
-            
         });
     }
 
@@ -32,32 +26,29 @@ export default class System {
      * Manage systemd services
      */
     service = {
-        restart: (svc: string) => {
+        restart: (service: string) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.system.service.restart,
                 params: {
-                    service: svc,
+                    service: service,
                 },
             });
         },
 
-        stop: (svc: string) => {
+        stop: (service: string) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.system.service.stop,
                 params: {
-                    service: svc,
+                    service: service,
                 },
             });
         },
 
-        start: (svc: string) => {
+        start: (service: string) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.system.service.start,
                 params: {
-                    service: svc,
+                    service: service,
                 },
             });
         },
@@ -65,18 +56,14 @@ export default class System {
 
     statistics() {
         return this.client.send({
-            jsonrpc: "2.0",
             method: methods.system.stats,
-            
         });
     }
 
     sudo = {
         info: () => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.system.sudo.info,
-                
             });
         },
         /**
@@ -85,7 +72,6 @@ export default class System {
          */
         password: (set: string) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.system.sudo.password,
                 params: { password: set },
             });
@@ -95,37 +81,29 @@ export default class System {
     peripherals = {
         usb: () => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.system.peripherals.usb,
-            })
+            });
         },
 
         serial: () => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.system.peripherals.serial,
-                
             });
         },
 
         video: () => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.system.peripherals.video,
-                
             });
         },
 
         canbus: (cansocket: string) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.system.peripherals.canbus,
                 params: {
                     interface: cansocket,
                 },
-                
             });
         },
     };
 }
-

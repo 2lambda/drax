@@ -7,47 +7,42 @@ import moonrakerClient from "../index.ts";
 import methods from "../util/methods.ts";
 export default class File {
     constructor(private client: moonrakerClient) {}
-    list(){
+    list() {
         return this.client.send({
-            jsonrpc: "2.0",
-            method: methods.database.list
-        })
+            method: methods.database.list,
+        });
     }
 
     item = {
-        create: (namespace: string, key: string|string[], value: any) => {
+        create: (namespace: string, key: string | string[], value: any) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.database.item.create,
-                params:{namespace,key, value}
-            })
+                params: { namespace, key, value },
+            });
         },
 
-        delete: (namespace: string, key: string|string[]) => {
+        delete: (namespace: string, key: string | string[]) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.database.item.delete,
-                params: {namespace,key}
-            })
-        }
-    }
+                params: { namespace, key },
+            });
+        },
+    };
 
     manage = {
         compact: () => {
             return this.client.send({
-                jsonrpc: "2.0",
-                method: methods.database.manage.compact
-            })
+                method: methods.database.manage.compact,
+            });
         },
         backup: {
             create: (filename: string) => {
                 return this.client.send({
-                    jsonrpc: "2.0",
                     method: methods.database.manage.backup.backup,
                     params: {
                         filename,
-                    }
-                })
+                    },
+                });
             },
             /**
              * BE CAREFUL WITH THIS!
@@ -56,60 +51,52 @@ export default class File {
              */
             restore: (filename: string) => {
                 return this.client.send({
-                    jsonrpc: "2.0",
                     method: methods.database.manage.backup.restore,
-                    params: {filename}
-                })
+                    params: { filename },
+                });
             },
             delete: (filename: string) => {
                 return this.client.send({
-                    jsonrpc: "2.0",
                     method: methods.database.manage.backup.delete,
-                    params: {filename}
-                })
-            }
-        }
-    }
+                    params: { filename },
+                });
+            },
+        },
+    };
 
     debug = {
         list: () => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.database.debug.list,
-            })
+            });
         },
 
-        delete: (namespace: string, key: string|string[]) => {
+        delete: (namespace: string, key: string | string[]) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.database.debug.delete,
-                params: {namespace,key}
-            })
+                params: { namespace, key },
+            });
         },
 
-        add: (namespace: string, key: string|string[], value: any) => {
+        add: (namespace: string, key: string | string[], value: any) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.database.debug.create,
-                params: {namespace,key,value}
-            })
+                params: { namespace, key, value },
+            });
         },
 
-        get: (namespace: string, key: string|string[]) => {
+        get: (namespace: string, key: string | string[]) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.database.debug.get,
-                params: {namespace,key}
-            })
+                params: { namespace, key },
+            });
         },
 
-        table: (table:string) => {
+        table: (table: string) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.database.debug.fetchTable,
-                params: {table}
-            })
-        }
-
-    }
+                params: { table },
+            });
+        },
+    };
 }

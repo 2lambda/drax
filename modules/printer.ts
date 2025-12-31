@@ -7,9 +7,7 @@ export default class Printer {
      */
     stop() {
         return this.client.send({
-            jsonrpc: "2.0",
             method: methods.printer.stop,
-            
         });
     }
 
@@ -18,9 +16,8 @@ export default class Printer {
      */
     hostRestart() {
         return this.client.send({
-            jsonrpc: "2.0",
             method: methods.printer.restart,
-            id: this.client.id
+            id: this.client.id,
         });
     }
 
@@ -29,9 +26,7 @@ export default class Printer {
      */
     fwRestart() {
         return this.client.send({
-            jsonrpc: "2.0",
             method: methods.printer.firmwareRestart,
-            
         });
     }
 
@@ -41,9 +36,7 @@ export default class Printer {
 
     list() {
         return this.client.send({
-            jsonrpc: "2.0",
             method: methods.printer.objects.list,
-            
         });
     }
 
@@ -53,12 +46,10 @@ export default class Printer {
      */
     query(objs: Record<string, string[]>) {
         return this.client.send({
-            jsonrpc: "2.0",
             method: methods.printer.objects.query,
             params: {
                 objects: objs,
             },
-            
         });
     }
 
@@ -68,40 +59,32 @@ export default class Printer {
      */
     subscribe(objs: Record<string, string[]>) {
         return this.client.send({
-            jsonrpc: "2.0",
             method: methods.printer.objects.subscribe,
             params: {
                 objects: objs,
             },
-            
         });
     }
 
     endstops() {
         return this.client.send({
-            jsonrpc: "2.0",
             method: methods.printer.endstops,
-            
         });
     }
 
     gcode = {
         run: (gcode: string) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.printer.gcode.run,
                 params: {
                     script: gcode,
                 },
-                
             });
         },
 
         help: () => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.printer.gcode.help,
-                
             });
         },
     };
@@ -109,36 +92,28 @@ export default class Printer {
     job = {
         start: (name: string) => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.printer.job.start,
                 params: {
                     filename: name,
                 },
-                
             });
         },
 
         pause: () => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.printer.job.pause,
-                
             });
         },
 
         resume: () => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.printer.job.resume,
-                
             });
         },
 
         cancel: () => {
             return this.client.send({
-                jsonrpc: "2.0",
                 method: methods.printer.job.cancel,
-                
             });
         },
     };

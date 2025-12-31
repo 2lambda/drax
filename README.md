@@ -1,6 +1,6 @@
 # Drax
 
-Drax is a javascript library made for interacting with moonraker (primarily with websockets). 
+Drax is a javascript library made for interacting with moonraker (primarily with websockets).
 
 ---
 
