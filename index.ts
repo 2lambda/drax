@@ -13,7 +13,6 @@ import Integrations from "./modules/integrations.ts";
 import { rng } from "./util/functions.ts";
 import type { request } from "./util/types";
 
-
 export default class moonrakerClient {
     /**
      * debug
@@ -77,8 +76,8 @@ export default class moonrakerClient {
     }
 
     private debugLog(message: string): void {
-        if(this.debug) {
-            console.log(message)
+        if (this.debug) {
+            console.log(message);
         }
     }
 
@@ -180,7 +179,7 @@ export default class moonrakerClient {
         this.accesspoints.http = secure
             ? `https://${this.host}/`
             : `http://${this.host}`;
-        debugLog(`connecting to ${this.accesspoints.ws}`);
+        this.debugLog(`connecting to ${this.accesspoints.ws}`);
         this.socket = new WebSocket(
             !secure
                 ? `ws://${this.host}/websocket`
@@ -188,7 +187,7 @@ export default class moonrakerClient {
         );
         this.socket.addEventListener("open", () => {
             this.ready = true;
-            debugLog(`${this.accesspoints.ws} connected`);
+            this.debugLog(`${this.accesspoints.ws} connected`);
         });
 
         this.server = new Server(this);
@@ -209,7 +208,7 @@ export default class moonrakerClient {
             if (pending) {
                 pending.resolve(data);
             }
-            debugLog("moonraker has sent a message")
+            this.debugLog("moonraker has sent a message");
         });
     }
 }
