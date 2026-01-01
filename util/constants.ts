@@ -266,6 +266,10 @@ const methods = {
             subscribe: "server.mqtt.subscribe",
         },
     },
+    apprise: {
+        list: "server.notifiers.list",
+        test: "debug.notifiers.test",
+    },
     spoolman: {
         status: "server.spoolman.status",
         set: "server.spoolman.post_spool_id",

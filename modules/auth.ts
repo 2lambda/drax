@@ -49,7 +49,7 @@ export default class Auth {
 
     available() {
         return this.client.send({
-            methods: methods.auth.list,
+            method: methods.auth.list,
         });
     }
 
