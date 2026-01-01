@@ -4,7 +4,7 @@ export default class Auth {
     constructor(private client: moonrakerClient) {}
 
     login(username: string, password: string, source?: string) {
-        return this.client.send({
+        return this.client.request({
             method: methods.auth.login,
             params: {
                 username,
@@ -15,20 +15,20 @@ export default class Auth {
     }
 
     logout() {
-        return this.client.send({
+        return this.client.request({
             method: methods.auth.logout,
         });
     }
 
     getuser() {
-        return this.client.send({
+        return this.client.request({
             method: methods.auth.user.current,
         });
     }
 
     usermod = {
         create: (username: string, password: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.auth.manage.create,
                 params: {
                     username,
@@ -38,7 +38,7 @@ export default class Auth {
         },
 
         delete: (username: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.auth.manage.create,
                 params: {
                     username,
@@ -48,7 +48,7 @@ export default class Auth {
     };
 
     available() {
-        return this.client.send({
+        return this.client.request({
             method: methods.auth.list,
         });
     }

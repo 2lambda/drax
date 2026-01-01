@@ -5,13 +5,13 @@ export default class Integrations {
     constructor(private client: moonrakerClient) {}
     apprise = {
         list: () => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.apprise.list,
             });
         },
 
         test: (name: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.apprise.test,
                 params: { name },
             });
@@ -19,20 +19,20 @@ export default class Integrations {
     };
     spoolman = {
         status: () => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.spoolman.status,
             });
         },
 
         set: (spool_id: number | null) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.spoolman.set,
                 params: { spool_id },
             });
         },
 
         get: () => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.spoolman.get,
             });
         },
@@ -53,7 +53,7 @@ export default class Integrations {
                 ...(options.body !== undefined && { body: options.body }),
             };
 
-            return this.client.send({
+            return this.client.request({
                 method: methods.spoolman.proxy,
                 params: params,
             });
@@ -62,13 +62,13 @@ export default class Integrations {
 
     estimator = {
         get: () => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.estimate.status,
             });
         },
 
         preform: (filename: string, estimator_config?: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.estimate.estimate,
                 params: {
                     filename,
@@ -84,7 +84,7 @@ export default class Integrations {
             estimator_config?: string,
             force?: boolean,
         ) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.estimate.process,
                 params: {
                     filename,
@@ -97,7 +97,7 @@ export default class Integrations {
         },
 
         dump: (dest_config?: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.estimate.DUMP,
                 ...(dest_config !== undefined
                     ? { params: { dest_config } }
@@ -108,12 +108,12 @@ export default class Integrations {
 
     td1 = {
         get: () => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.td1.get,
             });
         },
         reset: (serial: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.td1.reset,
                 params: { serial },
             });

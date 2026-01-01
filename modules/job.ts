@@ -4,13 +4,13 @@ export default class Job {
     constructor(private client: moonrakerClient) {}
     queue = {
         status: () => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.job.queue.status,
             });
         },
 
         add: (filenames: string[], reset: boolean = false) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.job.manage.create,
                 params: {
                     filenames,
@@ -24,14 +24,14 @@ export default class Job {
                 throw new Error("invalid options");
             } else {
                 if (all) {
-                    return this.client.send({
+                    return this.client.request({
                         method: methods.job.manage.delete,
                         params: {
                             all,
                         },
                     });
                 } else {
-                    return this.client.send({
+                    return this.client.request({
                         method: methods.job.manage.delete,
                         params: {
                             job_ids: job_ids,
@@ -43,19 +43,19 @@ export default class Job {
         },
 
         pause: () => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.job.queue.pause,
             });
         },
 
         start: () => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.job.queue.start,
             });
         },
 
         jump: (job_id: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.job.queue.jump,
                 params: {
                     job_id,
@@ -71,7 +71,7 @@ export default class Job {
             since?: number,
             order: "asc" | "desc" = "desc",
         ) => {
-            this.client.send({
+            this.client.request({
                 method: methods.job.history.getList,
                 params: {
                     limit,
@@ -85,26 +85,26 @@ export default class Job {
 
         totals: {
             get: () => {
-                return this.client.send({
+                return this.client.request({
                     method: methods.job.history.totals.get,
                 });
             },
             reset: () => {
-                return this.client.send({
+                return this.client.request({
                     method: methods.job.history.totals.reset,
                 });
             },
         },
 
         get: (uid: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.job.history.job.get,
                 params: { uid },
             });
         },
 
         delete: (uid: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.job.history.job.delete,
                 params: { uid },
             });

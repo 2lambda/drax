@@ -5,19 +5,19 @@ export default class System {
     constructor(private client: moonrakerClient) {}
 
     info() {
-        return this.client.send({
+        return this.client.request({
             method: methods.system.info,
         });
     }
 
     shutdown() {
-        return this.client.send({
+        return this.client.request({
             method: methods.system.shutdown,
         });
     }
 
     restart() {
-        return this.client.send({
+        return this.client.request({
             method: methods.system.restart,
         });
     }
@@ -27,7 +27,7 @@ export default class System {
      */
     service = {
         restart: (service: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.system.service.restart,
                 params: {
                     service: service,
@@ -36,7 +36,7 @@ export default class System {
         },
 
         stop: (service: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.system.service.stop,
                 params: {
                     service: service,
@@ -45,7 +45,7 @@ export default class System {
         },
 
         start: (service: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.system.service.start,
                 params: {
                     service: service,
@@ -55,14 +55,14 @@ export default class System {
     };
 
     statistics() {
-        return this.client.send({
+        return this.client.request({
             method: methods.system.stats,
         });
     }
 
     sudo = {
         info: () => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.system.sudo.info,
             });
         },
@@ -71,7 +71,7 @@ export default class System {
          * @param set
          */
         password: (set: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.system.sudo.password,
                 params: { password: set },
             });
@@ -80,25 +80,25 @@ export default class System {
 
     peripherals = {
         usb: () => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.system.peripherals.usb,
             });
         },
 
         serial: () => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.system.peripherals.serial,
             });
         },
 
         video: () => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.system.peripherals.video,
             });
         },
 
         canbus: (cansocket: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.system.peripherals.canbus,
                 params: {
                     interface: cansocket,

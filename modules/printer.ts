@@ -6,7 +6,7 @@ export default class Printer {
      * Emergency stop printer
      */
     stop() {
-        return this.client.send({
+        return this.client.request({
             method: methods.printer.stop,
         });
     }
@@ -15,9 +15,8 @@ export default class Printer {
      * Soft restart klipper
      */
     hostRestart() {
-        return this.client.send({
+        return this.client.request({
             method: methods.printer.restart,
-            id: this.client.id,
         });
     }
 
@@ -25,7 +24,7 @@ export default class Printer {
      * Restart klipper's firmware
      */
     fwRestart() {
-        return this.client.send({
+        return this.client.request({
             method: methods.printer.firmwareRestart,
         });
     }
@@ -35,7 +34,7 @@ export default class Printer {
      */
 
     list() {
-        return this.client.send({
+        return this.client.request({
             method: methods.printer.objects.list,
         });
     }
@@ -45,7 +44,7 @@ export default class Printer {
      * @param objs
      */
     query(objs: Record<string, string[]>) {
-        return this.client.send({
+        return this.client.request({
             method: methods.printer.objects.query,
             params: {
                 objects: objs,
@@ -58,7 +57,7 @@ export default class Printer {
      * @param objs
      */
     subscribe(objs: Record<string, string[]>) {
-        return this.client.send({
+        return this.client.request({
             method: methods.printer.objects.subscribe,
             params: {
                 objects: objs,
@@ -67,14 +66,14 @@ export default class Printer {
     }
 
     endstops() {
-        return this.client.send({
+        return this.client.request({
             method: methods.printer.endstops,
         });
     }
 
     gcode = {
         run: (gcode: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.printer.gcode.run,
                 params: {
                     script: gcode,
@@ -83,7 +82,7 @@ export default class Printer {
         },
 
         help: () => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.printer.gcode.help,
             });
         },
@@ -91,7 +90,7 @@ export default class Printer {
 
     job = {
         start: (name: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.printer.job.start,
                 params: {
                     filename: name,
@@ -100,19 +99,19 @@ export default class Printer {
         },
 
         pause: () => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.printer.job.pause,
             });
         },
 
         resume: () => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.printer.job.resume,
             });
         },
 
         cancel: () => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.printer.job.cancel,
             });
         },

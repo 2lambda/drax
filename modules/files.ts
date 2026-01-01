@@ -5,13 +5,13 @@ export default class File {
 
     list = {
         files: (root?: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.files.list.files,
                 ...(root !== undefined ? { params: { root: root } } : {}),
             });
         },
         roots: () => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.files.list.roots,
             });
         },
@@ -20,7 +20,7 @@ export default class File {
     gcode = {
         metadata: {
             get: (filename: string) => {
-                return this.client.send({
+                return this.client.request({
                     method: methods.files.metadata.get,
                     params: {
                         filename,
@@ -28,7 +28,7 @@ export default class File {
                 });
             },
             scan: (filename: string) => {
-                return this.client.send({
+                return this.client.request({
                     method: methods.files.metadata.scan,
                     params: {
                         filename,
@@ -37,7 +37,7 @@ export default class File {
             },
         },
         thumbnail: (filename: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.files.metadata.get,
                 params: {
                     filename,
@@ -47,7 +47,7 @@ export default class File {
     };
     directory = {
         info: (path: string = "gcodes", extended: boolean = true) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.files.directory.get,
                 params: {
                     path,
@@ -56,7 +56,7 @@ export default class File {
             });
         },
         create: (path: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.files.directory.create,
                 params: {
                     path,
@@ -64,7 +64,7 @@ export default class File {
             });
         },
         delete: (path: string, force: boolean = false) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.files.directory.delete,
                 params: { path, force },
             });
@@ -72,19 +72,19 @@ export default class File {
     };
     items = {
         copy: (source: string, dest: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.files.files.copy,
                 params: { source, dest },
             });
         },
         move: (source: string, dest: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.files.files.move,
                 params: { source, dest },
             });
         },
         zip: (files: string[], dest: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.files.files.zip,
                 params: {
                     dest,

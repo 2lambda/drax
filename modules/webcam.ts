@@ -4,13 +4,13 @@ export default class Webcam {
     constructor(private client: moonrakerClient) {}
 
     list() {
-        return this.client.send({
+        return this.client.request({
             method: methods.webcam.list,
         });
     }
 
     info(uid: string) {
-        return this.client.send({
+        return this.client.request({
             method: methods.webcam.individual.get,
             params: { uid },
         });
@@ -39,21 +39,21 @@ export default class Webcam {
                 parameters[i] = v;
             }
         }
-        return this.client.send({
+        return this.client.request({
             method: methods.webcam.individual.post,
             params: parameters,
         });
     }
 
     delete(uid: string) {
-        return this.client.send({
+        return this.client.request({
             method: methods.webcam.individual.delete,
             params: { uid },
         });
     }
 
     test(uid: string) {
-        return this.client.send({
+        return this.client.request({
             method: methods.webcam.individual.test,
             params: { uid },
         });

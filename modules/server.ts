@@ -9,7 +9,7 @@ export default class Server {
      * Get information about the server
      */
     info = () => {
-        return this.client.send({
+        return this.client.request({
             method: methods.server.info,
         });
     };
@@ -18,7 +18,7 @@ export default class Server {
      * Get moonraker.conf (or cfg, im not sure which it is)
      */
     config = () => {
-        return this.client.send({
+        return this.client.request({
             method: methods.server.config,
         });
     };
@@ -32,7 +32,7 @@ export default class Server {
          * @param include_monitors - Im not sure
          */
         temperature: (include_monitors: boolean = false) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.server.cached.temperature,
                 params: {
                     include_monitors: include_monitors,
@@ -44,7 +44,7 @@ export default class Server {
          * @param count  	The number of cached gcode responses to return. The default is to return all cached items.
          */
         gcode: (count?: number) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.server.cached.gcode,
                 params: {
                     count: count,
@@ -59,7 +59,7 @@ export default class Server {
      * @param app
      */
     rollover = (app: "moonraker" | "klipper" | "all" = "all") => {
-        return this.client.send({
+        return this.client.request({
             method: methods.server.rollover,
             params: {
                 application: app,
@@ -72,7 +72,7 @@ export default class Server {
      *
      */
     restart = () => {
-        return this.client.send({
+        return this.client.request({
             method: methods.server.restart,
         });
     };
@@ -94,7 +94,7 @@ export default class Server {
         token?: string /** */,
         key?: string,
     ) => {
-        return this.client.send({
+        return this.client.request({
             method: methods.server.id,
             params: {
                 client_name: name,

@@ -5,13 +5,13 @@ export default class Update {
 
     status = {
         get: () => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.update.status.get,
             });
         },
 
         refresh: (name?: string) => {
-            return this.client.send({
+            return this.client.request({
                 method: methods.update.status.refresh,
                 ...(name !== undefined ? { params: { name } } : {}),
             });
@@ -19,14 +19,14 @@ export default class Update {
     };
 
     upgrade(name?: string) {
-        return this.client.send({
+        return this.client.request({
             method: methods.update.upgrade,
             ...(name !== undefined ? { params: { name } } : {}),
         });
     }
 
     rollback(name: string) {
-        return this.client.send({
+        return this.client.request({
             method: methods.update.rollback,
             params: { name },
         });

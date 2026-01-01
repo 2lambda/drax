@@ -2,9 +2,17 @@ import File from "./modules/files.ts";
 import Printer from "./modules/printer.ts";
 import Server from "./modules/server.ts";
 import System from "./modules/system.ts";
+import Auth from "./modules/auth.ts";
+import Database from "./modules/database.ts";
+import Job from "./modules/job.ts";
+import Announcement from "./modules/announcements.ts";
+import Devices from "./modules/devices.ts";
+import Extensions from "./modules/extensions.ts";
+import Integrations from "./modules/integrations.ts";
+
 import { rng } from "./util/functions.ts";
 import type { request } from "./util/types";
-//todo users need to use await in their functions
+
 
 export default class moonrakerClient {
     /**
@@ -37,6 +45,13 @@ export default class moonrakerClient {
     public printer: Printer;
     public file: File;
     public system: System;
+    public auth: Auth;
+    public database: Database;
+    public job: Job;
+    public announcement: Announcement;
+    public devices: Devices;
+    public extensions: Extensions;
+    public integrations: Integrations;
     /** @internal */
     public accesspoints: {
         ws: string;
@@ -49,9 +64,6 @@ export default class moonrakerClient {
     /**
      * @private
      */
-    /***************/
-
-    /***********/
     private onReady(): Promise<void> {
         return new Promise((res) => {
             if (this.ready) {
@@ -64,12 +76,18 @@ export default class moonrakerClient {
         });
     }
 
+    private debugLog(message: string): void {
+        if(this.debug) {
+            console.log(message)
+        }
+    }
+
     /**
-     * send data
+     * Request and send data from the websocket.
      * @param data
      */
 
-    async send(data: request) {
+    async request(data: request) {
         await this.onReady();
         const id = this.id();
         const message = {
@@ -81,6 +99,14 @@ export default class moonrakerClient {
         return new Promise((resolve, reject) => {
             this.pending.set(id, { resolve, reject });
         });
+    }
+
+    /**
+     * Send is the same as Request, except it basically just fires something and forgets.
+     * @param data
+     */
+    send(data: request) {
+        this.socket.send(JSON.stringify(data));
     }
 
     /**
@@ -154,7 +180,7 @@ export default class moonrakerClient {
         this.accesspoints.http = secure
             ? `https://${this.host}/`
             : `http://${this.host}`;
-        console.log(`connecting to ${this.accesspoints.ws}`);
+        debugLog(`connecting to ${this.accesspoints.ws}`);
         this.socket = new WebSocket(
             !secure
                 ? `ws://${this.host}/websocket`
@@ -162,33 +188,28 @@ export default class moonrakerClient {
         );
         this.socket.addEventListener("open", () => {
             this.ready = true;
-            console.log(`connected to moonraker`);
+            debugLog(`${this.accesspoints.ws} connected`);
         });
+
         this.server = new Server(this);
         this.printer = new Printer(this);
         this.file = new File(this);
         this.system = new System(this);
+        this.auth = new Auth(this);
+        this.database = new Database(this);
+        this.job = new Job(this);
+        this.announcement = new Announcement(this);
+        this.devices = new Devices(this);
+        this.extensions = new Extensions(this);
+        this.integrations = new Integrations(this);
+
         this.socket.addEventListener("message", (message) => {
             const data = JSON.parse(message.data);
             const pending = this.pending.get(data.id);
             if (pending) {
                 pending.resolve(data);
             }
-            if (this.debug && data.id) {
-                console.log(`moonraker has sent a message`);
-            }
+            debugLog("moonraker has sent a message")
         });
     }
 }
-
-const client = new moonrakerClient("vanilla.local:7125", false, {
-    debug: true,
-});
-const a = await client.server.identify(
-    "drax",
-    "beta",
-    "other",
-    "https://github.com/2lambda/drax/tree/main",
-);
-const x = await client.printer.list();
-console.log(a, x);
