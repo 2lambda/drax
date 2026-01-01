@@ -61,17 +61,14 @@ export default class moonrakerClient {
     };
 
     /**
-     * @private
+     * @public
      */
-    private onReady(): Promise<void> {
+    public onReady(): Promise<void> {
         return new Promise((res) => {
-            if (this.ready) {
+            this.socket.addEventListener("open", () => {
                 res();
-            } else {
-                this.socket.addEventListener("open", () => {
-                    res();
-                });
-            }
+                this.debugLog("Ready");
+            });
         });
     }
 
@@ -90,11 +87,12 @@ export default class moonrakerClient {
         await this.onReady();
         const id = this.id();
         const message = {
-            id,
+            jsonrpc: "2.0",
             ...data,
+            id,
         };
-        this.socket.send(JSON.stringify(data));
-
+        this.debugLog(`sending ws data:\n${JSON.stringify(message)}`);
+        this.socket.send(JSON.stringify(message));
         return new Promise((resolve, reject) => {
             this.pending.set(id, { resolve, reject });
         });
@@ -180,15 +178,7 @@ export default class moonrakerClient {
             ? `https://${this.host}/`
             : `http://${this.host}`;
         this.debugLog(`connecting to ${this.accesspoints.ws}`);
-        this.socket = new WebSocket(
-            !secure
-                ? `ws://${this.host}/websocket`
-                : `wss://${this.host}/websocket`,
-        );
-        this.socket.addEventListener("open", () => {
-            this.ready = true;
-            this.debugLog(`${this.accesspoints.ws} connected`);
-        });
+        this.socket = new WebSocket(this.accesspoints.ws);
 
         this.server = new Server(this);
         this.printer = new Printer(this);
@@ -209,6 +199,7 @@ export default class moonrakerClient {
                 pending.resolve(data);
             }
             this.debugLog("moonraker has sent a message");
+            this.debugLog(data);
         });
     }
 }
