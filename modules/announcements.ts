@@ -3,10 +3,10 @@ import methods from "../util/constants";
 
 export default class Announcement {
     constructor(private client: moonrakerClient) {}
-    list(include_dismissed: true) {
+    list(params:{include_dismissed?: boolean}) {
         return this.client.request({
             method: methods.announcement.list,
-            params: { include_dismissed },
+            ...(params.include_dismissed !== undefined && { params }),
         });
     }
 
@@ -16,12 +16,13 @@ export default class Announcement {
         });
     }
 
-    dismiss(entry_id: string, wake_time: number | null = null) {
+    dismiss(params: {entry_id: string, wake_time?: number }) {
+        const { entry_id, wake_time } = params;
         return this.client.request({
             method: methods.announcement.dismiss,
             params: {
                 entry_id,
-                wake_time,
+                ...(wake_time !== undefined && { wake_time }),
             },
         });
     }
@@ -32,16 +33,16 @@ export default class Announcement {
                 method: methods.announcement.feeds.get,
             });
         },
-        subscribe: (name: string) => {
+        subscribe: (params: {name: string}) => {
             return this.client.request({
                 method: methods.announcement.feeds.get,
-                params: { name },
+                params,
             });
         },
-        remove: (name: string) => {
+        remove: (params: {name: string}) => {
             return this.client.request({
                 method: methods.announcement.feeds.remove,
-                params: { name },
+                params,
             });
         },
     };

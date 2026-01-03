@@ -14,48 +14,43 @@ export default class Devices {
         },
 
         state: {
-            get: (device: string) => {
+            get: (params: {device: string}) => {
                 return this.client.request({
                     method: methods.devices.power.state.get,
-                    params: {
-                        device,
-                    },
+                    params,
                 });
             },
 
-            set: (device: string, action: string) => {
+            set: (params: {device: string, action: string}) => {
                 return this.client.request({
                     method: methods.devices.power.state.set,
-                    params: {
-                        device,
-                        action,
-                    },
+                    params,
                 });
             },
         },
 
         batch: {
-            status: (devices: string[]) => {
+            status: (params: {devices: string[]}) => {
                 return this.client.request({
                     method: methods.devices.power.batch.get,
-                    params: Object.fromEntries(devices.map((i) => [i, null])),
+                    params: Object.fromEntries(params.devices.map((i) => [i, null])),
                 });
             },
             power: {
-                on: (devices: string[]) => {
+                on: (params: {devices: string[]}) => {
                     return this.client.request({
                         method: methods.devices.power.batch.on,
                         params: Object.fromEntries(
-                            devices.map((i) => [i, null]),
+                            params.devices.map((i) => [i, null]),
                         ),
                     });
                 },
 
-                off: (devices: string[]) => {
+                off: (params: {devices: string[]}) => {
                     return this.client.request({
                         method: methods.devices.power.batch.off,
                         params: Object.fromEntries(
-                            devices.map((i) => [i, null]),
+                            params.devices.map((i) => [i, null]),
                         ),
                     });
                 },
@@ -71,42 +66,40 @@ export default class Devices {
                 });
             },
 
-            status: (devices: string[]) => {
+            status: (params: {devices: string[]}) => {
                 return this.client.request({
                     method: methods.devices.wled.status,
-                    params: Object.fromEntries(devices.map((i) => [i, null])),
+                    params: Object.fromEntries(params.devices.map((i) => [i, null])),
                 });
             },
         },
 
         control: {
-            on: (devices: string[]) => {
+            on: (params: {devices: string[]}) => {
                 return this.client.request({
                     method: methods.devices.wled.on,
-                    params: Object.fromEntries(devices.map((i) => [i, null])),
+                    params: Object.fromEntries(params.devices.map((i) => [i, null])),
                 });
             },
-            off: (devices: string[]) => {
+            off: (params: {devices: string[]}) => {
                 return this.client.request({
                     method: methods.devices.wled.off,
-                    params: Object.fromEntries(devices.map((i) => [i, null])),
+                    params: Object.fromEntries(params.devices.map((i) => [i, null])),
                 });
             },
-            toggle: (devices: string[]) => {
+            toggle: (params: {devices: string[]}) => {
                 return this.client.request({
                     method: methods.devices.wled.toggle,
-                    params: Object.fromEntries(devices.map((i) => [i, null])),
+                    params: Object.fromEntries(params.devices.map((i) => [i, null])),
                 });
             },
         },
 
         individual: {
-            get: (strip: string) => {
+            get: (params: {strip: string}) => {
                 return this.client.request({
                     method: methods.devices.wled.get,
-                    params: {
-                        strip,
-                    },
+                    params,
                 });
             },
 
@@ -133,14 +126,15 @@ export default class Devices {
     };
 
     sensor = {
-        list: (extended: boolean = false) => {
+        list: (params: {extended: boolean}) => {
             return this.client.request({
                 method: methods.devices.sensor.list,
-                params: { extended },
+                ...(params.extended !== undefined && { params }),
             });
         },
 
-        information: (sensor: string, extended: boolean = false) => {
+        information: (params: {sensor: string, extended?: boolean}) => {
+            const { sensor, extended=false } = params;
             return this.client.request({
                 method: methods.devices.sensor.info,
                 params: {
@@ -150,19 +144,11 @@ export default class Devices {
             });
         },
 
-        measurements: (sensor?: string) => {
-            if (sensor !== undefined) {
-                return this.client.request({
-                    method: methods.devices.sensor.measurements,
-                    params: {
-                        sensor,
-                    },
-                });
-            } else {
-                return this.client.request({
-                    method: methods.devices.sensor.measurements,
-                });
-            }
+        measurements: (params: {sensor?: string    }) => {
+            return this.client.request({
+                method: methods.devices.sensor.measurements,
+                ...(params.sensor !== undefined && { params }),
+            });
         },
     };
 

@@ -3,13 +3,14 @@ import methods from "../util/constants.ts";
 export default class Auth {
     constructor(private client: moonrakerClient) {}
 
-    login(username: string, password: string, source?: string) {
+    login(params: {username: string, password: string, source?: string }) {
+        const {username, password, source} = params;
         return this.client.request({
             method: methods.auth.login,
             params: {
                 username,
                 password,
-                ...(source !== undefined ? { source } : {}),
+                ...(source !== undefined && { source }),
             },
         });
     }
@@ -27,7 +28,8 @@ export default class Auth {
     }
 
     usermod = {
-        create: (username: string, password: string) => {
+        create: (params: {username: string, password: string}) => {
+            const {username, password} = params;
             return this.client.request({
                 method: methods.auth.manage.create,
                 params: {
@@ -37,7 +39,8 @@ export default class Auth {
             });
         },
 
-        delete: (username: string) => {
+        delete: (params: {username: string}) => {
+            const {username} = params;
             return this.client.request({
                 method: methods.auth.manage.create,
                 params: {
@@ -53,5 +56,10 @@ export default class Auth {
         });
     }
 
-    resetPassword(password: string, newPassword: string) {}
+    resetPassword(params: {password: string, newPassword: string}) {
+        return this.client.request({
+            method: methods.auth.manage.resetPassword,
+            params
+        })
+    }
 }

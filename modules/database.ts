@@ -14,17 +14,21 @@ export default class Database {
     }
 
     item = {
-        create: (namespace: string, key: string | string[], value: any) => {
+        create: (params: {namespace: string, key: string | string[]
+,
+    value: any
+}) => {
             return this.client.request({
                 method: methods.database.item.create,
-                params: { namespace, key, value },
+                params,
             });
         },
 
-        delete: (namespace: string, key: string | string[]) => {
+        delete: (params: {namespace: string, key: string | string[]
+}) => {
             return this.client.request({
                 method: methods.database.item.delete,
-                params: { namespace, key },
+                params,
             });
         },
     };
@@ -36,12 +40,10 @@ export default class Database {
             });
         },
         backup: {
-            create: (filename: string) => {
+            create: (params: {filename: string}) => {
                 return this.client.request({
                     method: methods.database.manage.backup.backup,
-                    params: {
-                        filename,
-                    },
+                    params,
                 });
             },
             /**
@@ -49,16 +51,16 @@ export default class Database {
              * THIS WILL RESTORE YOUR SQLITE DATABASE
              * @param filename {string} - Name of SQLiTE backup to restore
              */
-            restore: (filename: string) => {
+            restore: (params: {filename: string}) => {
                 return this.client.request({
                     method: methods.database.manage.backup.restore,
-                    params: { filename },
+                    params,
                 });
             },
-            delete: (filename: string) => {
+            delete: (params: {filename: string}) => {
                 return this.client.request({
                     method: methods.database.manage.backup.delete,
-                    params: { filename },
+                    params,
                 });
             },
         },
@@ -78,24 +80,28 @@ export default class Database {
             });
         },
 
-        add: (namespace: string, key: string | string[], value: any) => {
+        add: (params: {namespace: string, key: string | string[]
+,
+    value: any
+}) => {
             return this.client.request({
                 method: methods.database.debug.create,
-                params: { namespace, key, value },
+                params,
             });
         },
 
-        get: (namespace: string, key: string | string[]) => {
+        get: (params: {namespace: string, key: string | string[]
+}) => {
             return this.client.request({
                 method: methods.database.debug.get,
-                params: { namespace, key },
+                params,
             });
         },
 
-        table: (table: string) => {
+        table: (params: {table: string}) => {
             return this.client.request({
                 method: methods.database.debug.fetchTable,
-                params: { table },
+                params,
             });
         },
     };

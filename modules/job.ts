@@ -62,28 +62,26 @@ export default class Job {
         },
     };
     history = {
-        // list: (options: {
-        //     limit?: number,
-        //     start?: number,
-        //     before?: number,
-        //     since?: number,
-        //     order?: "asc" | "desc" = "desc",
-        // }) => {
-        //     const params = {
-        //
-        //     }
-        //
-        //     this.client.request({
-        //         method: methods.job.history.getList,
-        //         params: {
-        //             limit,
-        //             start,
-        //             ...(before !== undefined ? { params: { before } } : {}),
-        //             ...(since !== undefined ? { params: { since } } : {}),
-        //             order,
-        //         },
-        //     });
-        // },
+        list: (params: {
+            limit?: number,
+            start?: number,
+            before?: number,
+            since?: number,
+            order?: "asc" | "desc"
+        }) => {
+            const {limit=50,start=0, order="desc", before, since} = params;
+
+            this.client.request({
+                method: methods.job.history.getList,
+                params: {
+                    limit,
+                    start,
+                    ...(before !== undefined && { before }),
+                    ...(since !== undefined && { since }),
+                    order,
+                },
+            });
+        },
 
         totals: {
             get: () => {
@@ -98,17 +96,17 @@ export default class Job {
             },
         },
 
-        get: (uid: string) => {
+        get: (params: {uid: string}) => {
             return this.client.request({
                 method: methods.job.history.job.get,
-                params: { uid },
+                params,
             });
         },
 
-        delete: (uid: string) => {
+        delete: (params: {uid: string}) => {
             return this.client.request({
                 method: methods.job.history.job.delete,
-                params: { uid },
+                params,
             });
         },
     };
