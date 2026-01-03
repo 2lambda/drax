@@ -9,7 +9,8 @@ import Announcement from "./modules/announcements.ts";
 import Devices from "./modules/devices.ts";
 import Extensions from "./modules/extensions.ts";
 import Integrations from "./modules/integrations.ts";
-
+import Webcam from "./modules/webcam";
+import Update from "./modules/update";
 import { rng } from "./util/functions.ts";
 import type { request } from "./util/types";
 
@@ -51,6 +52,8 @@ export default class moonrakerClient {
     public devices: Devices;
     public extensions: Extensions;
     public integrations: Integrations;
+    public webcam: Webcam;
+    public update: Update;
     /** @internal */
     public accesspoints: {
         ws: string;
@@ -65,9 +68,13 @@ export default class moonrakerClient {
      */
     public onReady(): Promise<void> {
         return new Promise((res) => {
+            if (this.socket.readyState === WebSocket.OPEN) {
+                res();
+                return;
+            }
             this.socket.addEventListener("open", () => {
                 res();
-                this.debugLog("Ready");
+                return;
             });
         });
     }
@@ -85,6 +92,7 @@ export default class moonrakerClient {
 
     async request(data: request) {
         await this.onReady();
+        console.log("ready");
         const id = this.id();
         const message = {
             jsonrpc: "2.0",
@@ -102,7 +110,7 @@ export default class moonrakerClient {
      * Send is the same as Request, except it basically just fires something and forgets.
      * @param data
      */
-    send(data: request) {
+    private send(data: request) {
         this.socket.send(JSON.stringify(data));
     }
 
@@ -124,21 +132,11 @@ export default class moonrakerClient {
     /**
      * https://en.wikipedia.org/wiki/86_(term)
      * @param reason
-     * @param time
      * @private
      */
-    private eightysix(reason: string, time: number) {
+    public stop(reason: string) {
         this.ready = false;
         this.socket.close(1000, reason);
-        setTimeout(() => {
-            //websocket has 5 seconds to close
-            if (this.socket.readyState !== WebSocket.CLOSED) {
-                console.warn(
-                    "[DRAX] websocket refused to close by itself, measures taken",
-                );
-                this.socket.terminate(); // code editors say this will error, it will not
-            }
-        }, time * 1000);
     }
     /**
      * Reinit websocket
@@ -146,7 +144,7 @@ export default class moonrakerClient {
      * @private
      */
     private rebase(reason: string) {
-        this.eightysix(reason, 5);
+        this.stop(reason);
         this.used.clear();
         this.pending.clear();
         this.socket = new WebSocket(`ws://${this.host}/websocket`);
@@ -165,6 +163,10 @@ export default class moonrakerClient {
              * @internal
              */
             debug?: boolean;
+            /**
+             * Subscribe to all printer notifications as soon as WS connects.
+             */
+            subscribe?: boolean;
         },
     ) {
         if (options?.debug) {
@@ -191,7 +193,8 @@ export default class moonrakerClient {
         this.devices = new Devices(this);
         this.extensions = new Extensions(this);
         this.integrations = new Integrations(this);
-
+        this.webcam = new Webcam(this);
+        this.update = new Update(this);
         this.socket.addEventListener("message", (message) => {
             const data = JSON.parse(message.data);
             const pending = this.pending.get(data.id);
@@ -199,7 +202,7 @@ export default class moonrakerClient {
                 pending.resolve(data);
             }
             this.debugLog("moonraker has sent a message");
-            this.debugLog(data);
+            console.dir(data, { depth: null });
         });
     }
 }

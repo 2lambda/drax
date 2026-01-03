@@ -9,37 +9,35 @@ export default class Job {
             });
         },
 
-        add: (filenames: string[], reset: boolean = false) => {
+        add: (options: { filenames: string[]; reset?: boolean }) => {
+            const params: { filename: string[]; reset: boolean } = {
+                filename: options.filenames,
+                reset: options.reset ?? false,
+            };
             return this.client.request({
                 method: methods.job.manage.create,
-                params: {
-                    filenames,
-                    reset,
-                },
+                params,
             });
         },
 
-        remove: (job_ids?: string[], all?: boolean) => {
-            if (job_ids.length === 0 && !all) {
-                throw new Error("invalid options");
+        remove: (
+            options:
+                | { all: true; job_ids?: never }
+                | { all?: false; job_ids?: never },
+        ) => {
+            const all = options.all ?? false;
+            const params = {};
+            if (all) {
+                Object.assign(params, { all });
             } else {
-                if (all) {
-                    return this.client.request({
-                        method: methods.job.manage.delete,
-                        params: {
-                            all,
-                        },
-                    });
-                } else {
-                    return this.client.request({
-                        method: methods.job.manage.delete,
-                        params: {
-                            job_ids: job_ids,
-                            all,
-                        },
-                    });
-                }
+                Object.assign(params, { all });
+                Object.assign(params, { job_ids: options.job_ids });
             }
+
+            return this.client.request({
+                method: methods.job.manage.delete,
+                params,
+            });
         },
 
         pause: () => {
@@ -54,34 +52,38 @@ export default class Job {
             });
         },
 
-        jump: (job_id: string) => {
+        jump: (options: { job_id: string }) => {
             return this.client.request({
                 method: methods.job.queue.jump,
                 params: {
-                    job_id,
+                    job_id: options.job_id,
                 },
             });
         },
     };
     history = {
-        list: (
-            limit: number = 50,
-            start: number = 0,
-            before?: number,
-            since?: number,
-            order: "asc" | "desc" = "desc",
-        ) => {
-            this.client.request({
-                method: methods.job.history.getList,
-                params: {
-                    limit,
-                    start,
-                    ...(before !== undefined ? { params: { before } } : {}),
-                    ...(since !== undefined ? { params: { since } } : {}),
-                    order,
-                },
-            });
-        },
+        // list: (options: {
+        //     limit?: number,
+        //     start?: number,
+        //     before?: number,
+        //     since?: number,
+        //     order?: "asc" | "desc" = "desc",
+        // }) => {
+        //     const params = {
+        //
+        //     }
+        //
+        //     this.client.request({
+        //         method: methods.job.history.getList,
+        //         params: {
+        //             limit,
+        //             start,
+        //             ...(before !== undefined ? { params: { before } } : {}),
+        //             ...(since !== undefined ? { params: { since } } : {}),
+        //             order,
+        //         },
+        //     });
+        // },
 
         totals: {
             get: () => {

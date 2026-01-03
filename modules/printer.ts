@@ -57,6 +57,7 @@ export default class Printer {
      * @param objs
      */
     subscribe(objs: Record<string, string[]>) {
+        console.log(objs);
         return this.client.request({
             method: methods.printer.objects.subscribe,
             params: {
