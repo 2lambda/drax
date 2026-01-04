@@ -39,30 +39,21 @@ export default class Printer {
         });
     }
 
-    /**
-     * Query printer objects
-     * @param objs
-     */
-    query(objs: Record<string, string[]>) {
+    query(params: { objects: Record<string, string[]> }) {
         return this.client.request({
             method: methods.printer.objects.query,
-            params: {
-                objects: objs,
-            },
+            params,
         });
     }
 
     /**
      * Subscribe to printer objects
-     * @param objs
+     * @param params
      */
-    subscribe(objs: Record<string, string[]>) {
-        console.log(objs);
+    subscribe(params: { objects: Record<string, string[]> }) {
         return this.client.request({
             method: methods.printer.objects.subscribe,
-            params: {
-                objects: objs,
-            },
+            params,
         });
     }
 
@@ -73,11 +64,11 @@ export default class Printer {
     }
 
     gcode = {
-        run: (gcode: string) => {
+        run: (params: { gcode: string }) => {
             return this.client.request({
                 method: methods.printer.gcode.run,
                 params: {
-                    script: gcode,
+                    script: params.gcode,
                 },
             });
         },
@@ -90,11 +81,11 @@ export default class Printer {
     };
 
     job = {
-        start: (name: string) => {
+        start: (params: { name: string }) => {
             return this.client.request({
                 method: methods.printer.job.start,
                 params: {
-                    filename: name,
+                    filename: params.name,
                 },
             });
         },

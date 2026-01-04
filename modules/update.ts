@@ -10,25 +10,25 @@ export default class Update {
             });
         },
 
-        refresh: (name?: string) => {
+        refresh: (params: { name?: string }) => {
             return this.client.request({
                 method: methods.update.status.refresh,
-                ...(name !== undefined ? { params: { name } } : {}),
+                ...(params.name !== undefined ? { params } : {}),
             });
         },
     };
 
-    upgrade(name?: string) {
+    upgrade(params: { name?: string }) {
         return this.client.request({
             method: methods.update.upgrade,
-            ...(name !== undefined ? { params: { name } } : {}),
+            ...(params.name !== undefined ? { params } : {}),
         });
     }
 
-    rollback(name: string) {
+    rollback(params: { name: string }) {
         return this.client.request({
             method: methods.update.rollback,
-            params: { name },
+            params,
         });
     }
 }

@@ -9,10 +9,10 @@ export default class Webcam {
         });
     }
 
-    info(uid: string) {
+    info(params: { uid: string }) {
         return this.client.request({
             method: methods.webcam.individual.get,
-            params: { uid },
+            params,
         });
     }
 
@@ -33,29 +33,29 @@ export default class Webcam {
         aspect_ratio?: string;
         extra_data?: object;
     }) {
-        let parameters: Record<string, unknown> = {};
+        let params: Record<string, unknown> = {};
         for (const [i, v] of Object.entries(options)) {
             if (v !== undefined) {
-                parameters[i] = v;
+                params[i] = v;
             }
         }
         return this.client.request({
             method: methods.webcam.individual.post,
-            params: parameters,
+            params,
         });
     }
 
-    delete(uid: string) {
+    delete(params: { uid: string }) {
         return this.client.request({
             method: methods.webcam.individual.delete,
-            params: { uid },
+            params,
         });
     }
 
-    test(uid: string) {
+    test(params: { uid: string }) {
         return this.client.request({
             method: methods.webcam.individual.test,
-            params: { uid },
+            params,
         });
     }
 }

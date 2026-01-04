@@ -26,30 +26,24 @@ export default class System {
      * Manage systemd services
      */
     service = {
-        restart: (service: string) => {
+        restart: (params: { service: string }) => {
             return this.client.request({
                 method: methods.system.service.restart,
-                params: {
-                    service: service,
-                },
+                params,
             });
         },
 
-        stop: (service: string) => {
+        stop: (params: { service: string }) => {
             return this.client.request({
                 method: methods.system.service.stop,
-                params: {
-                    service: service,
-                },
+                params,
             });
         },
 
-        start: (service: string) => {
+        start: (params: { service: string }) => {
             return this.client.request({
                 method: methods.system.service.start,
-                params: {
-                    service: service,
-                },
+                params,
             });
         },
     };
@@ -68,12 +62,11 @@ export default class System {
         },
         /**
          * if i were you id definitely be careful with this
-         * @param set
          */
-        password: (set: string) => {
+        password: (params: { password: string }) => {
             return this.client.request({
                 method: methods.system.sudo.password,
-                params: { password: set },
+                params,
             });
         },
     };
@@ -97,12 +90,10 @@ export default class System {
             });
         },
 
-        canbus: (cansocket: string) => {
+        canbus: (params: { interface: string }) => {
             return this.client.request({
                 method: methods.system.peripherals.canbus,
-                params: {
-                    interface: cansocket,
-                },
+                params,
             });
         },
     };

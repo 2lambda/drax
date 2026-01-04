@@ -10,10 +10,10 @@ export default class Integrations {
             });
         },
 
-        test: (name: string) => {
+        test: (params: { name: string }) => {
             return this.client.request({
                 method: methods.apprise.test,
-                params: { name },
+                params,
             });
         },
     };
@@ -24,10 +24,10 @@ export default class Integrations {
             });
         },
 
-        set: (spool_id: number | null) => {
+        set: (params: { spool_id: number | null }) => {
             return this.client.request({
                 method: methods.spoolman.set,
-                params: { spool_id },
+                params,
             });
         },
 
@@ -55,7 +55,7 @@ export default class Integrations {
 
             return this.client.request({
                 method: methods.spoolman.proxy,
-                params: params,
+                params,
             });
         },
     };
@@ -67,7 +67,8 @@ export default class Integrations {
             });
         },
 
-        preform: (filename: string, estimator_config?: string) => {
+        preform: (params: { filename: string; estimator_config?: string }) => {
+            const { filename, estimator_config } = params;
             return this.client.request({
                 method: methods.estimate.estimate,
                 params: {
@@ -79,11 +80,12 @@ export default class Integrations {
             });
         },
 
-        process: (
-            filename: string,
-            estimator_config?: string,
-            force?: boolean,
-        ) => {
+        process: (params: {
+            filename: string;
+            estimator_config?: string;
+            force?: boolean;
+        }) => {
+            const { filename, estimator_config, force } = params;
             return this.client.request({
                 method: methods.estimate.process,
                 params: {
@@ -96,7 +98,8 @@ export default class Integrations {
             });
         },
 
-        dump: (dest_config?: string) => {
+        dump: (params: { dest_config?: string }) => {
+            const { dest_config } = params;
             return this.client.request({
                 method: methods.estimate.DUMP,
                 ...(dest_config !== undefined
@@ -112,10 +115,10 @@ export default class Integrations {
                 method: methods.td1.get,
             });
         },
-        reset: (serial: string) => {
+        reset: (params: { serial: string }) => {
             return this.client.request({
                 method: methods.td1.reset,
-                params: { serial },
+                params,
             });
         },
     };

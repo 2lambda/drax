@@ -10,7 +10,8 @@ export default class Extensions {
         });
     }
 
-    call(agent: string, method: string, args: any[] | object) {
+    call(params: { agent: string; method: string; args: any[] | object }) {
+        const { agent, method, args } = params;
         return this.client.request({
             method: methods.extensions.call,
             params: {
@@ -22,22 +23,17 @@ export default class Extensions {
     }
 
     agent = {
-        send: (event: string, data: any) => {
+        send: (params: { event: string; data: any }) => {
             return this.client.request({
                 method: methods.extensions.agent.send,
-                params: {
-                    event,
-                    data,
-                },
+                params,
             });
         },
 
-        register: (method_name: string) => {
+        register: (params: { method_name: string }) => {
             return this.client.request({
                 method: methods.extensions.agent.register,
-                params: {
-                    method_name,
-                },
+                params,
             });
         },
     };
