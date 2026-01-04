@@ -4,10 +4,11 @@ export default class File {
     constructor(private client: moonrakerClient) {}
 
     list = {
-        files: (root?: string) => {
+        files: (params: {root?: string
+    }) => {
             return this.client.request({
                 method: methods.files.list.files,
-                ...(root !== undefined ? { params: { root: root } } : {}),
+                ...(params !== undefined ? { params } : {}),
             });
         },
         roots: () => {
@@ -19,34 +20,29 @@ export default class File {
 
     gcode = {
         metadata: {
-            get: (filename: string) => {
+            get: (params: {filename: string}) => {
                 return this.client.request({
                     method: methods.files.metadata.get,
-                    params: {
-                        filename,
-                    },
+                    params,
                 });
             },
-            scan: (filename: string) => {
+            scan: (params: {filename: string}) => {
                 return this.client.request({
                     method: methods.files.metadata.scan,
-                    params: {
-                        filename,
-                    },
+                    params
                 });
             },
         },
-        thumbnail: (filename: string) => {
+        thumbnail: (params: {filename: string}) => {
             return this.client.request({
                 method: methods.files.metadata.get,
-                params: {
-                    filename,
-                },
+                params
             });
         },
     };
     directory = {
-        info: (path: string = "gcodes", extended: boolean = true) => {
+        info: (params: {path: string, extended: boolean}) => {
+            const {path="gcodes", extended=true} = params;
             return this.client.request({
                 method: methods.files.directory.get,
                 params: {
@@ -63,7 +59,8 @@ export default class File {
                 },
             });
         },
-        delete: (path: string, force: boolean = false) => {
+        delete: (params: {path: string, force: boolean }) => {
+            const {path, force=false} = params;
             return this.client.request({
                 method: methods.files.directory.delete,
                 params: { path, force },
@@ -71,19 +68,20 @@ export default class File {
         },
     };
     items = {
-        copy: (source: string, dest: string) => {
+        copy: (params: { source: string, dest: string }) => {
             return this.client.request({
                 method: methods.files.files.copy,
-                params: { source, dest },
+                params,
             });
         },
-        move: (source: string, dest: string) => {
+        move: (params: { source: string, dest: string }) => {
             return this.client.request({
                 method: methods.files.files.move,
-                params: { source, dest },
+                params,
             });
         },
-        zip: (files: string[], dest: string) => {
+        zip: (params: {files: string[], dest: string}) => {
+            const {files, dest} = params;
             return this.client.request({
                 method: methods.files.files.zip,
                 params: {
@@ -93,6 +91,7 @@ export default class File {
             });
         },
     };
+    //todo: update this
     file = {
         download: async (root: string, filename: string): Promise<Blob> => {
             try {

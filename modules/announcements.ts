@@ -3,7 +3,7 @@ import methods from "../util/constants";
 
 export default class Announcement {
     constructor(private client: moonrakerClient) {}
-    list(params:{include_dismissed?: boolean}) {
+    list(params: { include_dismissed?: boolean }) {
         return this.client.request({
             method: methods.announcement.list,
             ...(params.include_dismissed !== undefined && { params }),
@@ -16,7 +16,7 @@ export default class Announcement {
         });
     }
 
-    dismiss(params: {entry_id: string, wake_time?: number }) {
+    dismiss(params: { entry_id: string; wake_time?: number }) {
         const { entry_id, wake_time } = params;
         return this.client.request({
             method: methods.announcement.dismiss,
@@ -33,13 +33,13 @@ export default class Announcement {
                 method: methods.announcement.feeds.get,
             });
         },
-        subscribe: (params: {name: string}) => {
+        subscribe: (params: { name: string }) => {
             return this.client.request({
                 method: methods.announcement.feeds.get,
                 params,
             });
         },
-        remove: (params: {name: string}) => {
+        remove: (params: { name: string }) => {
             return this.client.request({
                 method: methods.announcement.feeds.remove,
                 params,

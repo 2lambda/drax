@@ -29,40 +29,43 @@ export default class Server {
     cached = {
         /**
          * Get cached temperature data
-         * @param include_monitors - Im not sure
+         * @param params
          */
-        temperature: (include_monitors: boolean = false) => {
+        temperature: (params: {include_monitors?: boolean}) => {
+            const {include_monitors=false} = params;
             return this.client.request({
                 method: methods.server.cached.temperature,
                 params: {
-                    include_monitors: include_monitors,
-                },
+                    include_monitors
+                }
             });
         },
-        /**
-         * Get cached gcode data
-         * @param count  	The number of cached gcode responses to return. The default is to return all cached items.
-         */
-        gcode: (count?: number) => {
+        
+        gcode: (params: {count: number }) =>
+        {
             return this.client.request({
                 method: methods.server.cached.gcode,
                 params: {
-                    count: count,
+                    count: params.count,
                 },
-                ...(count !== undefined ? { params: { count } } : {}),
             });
         },
     };
 
     /**
      * Requests a manual rollover for log files registered with Moonraker's log management facility. Currently these are limited to moonraker.log and klippy.log.
-     * @param app
+     * @param params
      */
-    rollover = (app: "moonraker" | "klipper" | "all" = "all") => {
+    rollover = (params: {app: "moonraker"
+|
+    "klipper"
+|
+    "all"
+}) => {
         return this.client.request({
             method: methods.server.rollover,
             params: {
-                application: app,
+                application: params.app,
             },
         });
     };
@@ -79,30 +82,25 @@ export default class Server {
 
     /**
      * Identify this client to Moonraker
-     * @param {string} name - Application name
-     * @param {string} [version] - Application version
-     * @param appType - What the type of the application is.
-     * @param {string} url - Application URL
-     * @param {string} [token] - Optional access token
-     * @param {string} [key] - Optional API key
+     * @param params
      */
-    identify = (
-        name: string,
-        version: string,
-        appType: appType /** what type of application your app is */,
-        url: string,
-        token?: string /** */,
-        key?: string,
-    ) => {
+    identify = (params:{
+                    name: string,
+                    version: string,
+                    appType: appType /** what type of application your app is */,
+                    url: string,
+                    token?: string /** */,
+                    key?: string
+    }) => {
         return this.client.request({
             method: methods.server.id,
             params: {
-                client_name: name,
-                version: version,
-                type: appType,
-                url: url,
-                ...(token !== undefined && { access_token: token }),
-                ...(key !== undefined && { api_key: key }),
+                client_name: params.name,
+                version: params.version,
+                type: params.appType,
+                url: params.url,
+                ...(params.token !== undefined && { access_token: params.token }),
+                ...(params.key !== undefined && { api_key: params.key }),
             },
         });
     };

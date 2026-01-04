@@ -63,13 +63,19 @@ export default class Job {
     };
     history = {
         list: (params: {
-            limit?: number,
-            start?: number,
-            before?: number,
-            since?: number,
-            order?: "asc" | "desc"
+            limit?: number;
+            start?: number;
+            before?: number;
+            since?: number;
+            order?: "asc" | "desc";
         }) => {
-            const {limit=50,start=0, order="desc", before, since} = params;
+            const {
+                limit = 50,
+                start = 0,
+                order = "desc",
+                before,
+                since,
+            } = params;
 
             this.client.request({
                 method: methods.job.history.getList,
@@ -96,14 +102,14 @@ export default class Job {
             },
         },
 
-        get: (params: {uid: string}) => {
+        get: (params: { uid: string }) => {
             return this.client.request({
                 method: methods.job.history.job.get,
                 params,
             });
         },
 
-        delete: (params: {uid: string}) => {
+        delete: (params: { uid: string }) => {
             return this.client.request({
                 method: methods.job.history.job.delete,
                 params,

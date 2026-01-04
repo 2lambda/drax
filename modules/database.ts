@@ -14,18 +14,18 @@ export default class Database {
     }
 
     item = {
-        create: (params: {namespace: string, key: string | string[]
-,
-    value: any
-}) => {
+        create: (params: {
+            namespace: string;
+            key: string | string[];
+            value: any;
+        }) => {
             return this.client.request({
                 method: methods.database.item.create,
                 params,
             });
         },
 
-        delete: (params: {namespace: string, key: string | string[]
-}) => {
+        delete: (params: { namespace: string; key: string | string[] }) => {
             return this.client.request({
                 method: methods.database.item.delete,
                 params,
@@ -40,7 +40,7 @@ export default class Database {
             });
         },
         backup: {
-            create: (params: {filename: string}) => {
+            create: (params: { filename: string }) => {
                 return this.client.request({
                     method: methods.database.manage.backup.backup,
                     params,
@@ -51,13 +51,13 @@ export default class Database {
              * THIS WILL RESTORE YOUR SQLITE DATABASE
              * @param filename {string} - Name of SQLiTE backup to restore
              */
-            restore: (params: {filename: string}) => {
+            restore: (params: { filename: string }) => {
                 return this.client.request({
                     method: methods.database.manage.backup.restore,
                     params,
                 });
             },
-            delete: (params: {filename: string}) => {
+            delete: (params: { filename: string }) => {
                 return this.client.request({
                     method: methods.database.manage.backup.delete,
                     params,
@@ -80,25 +80,25 @@ export default class Database {
             });
         },
 
-        add: (params: {namespace: string, key: string | string[]
-,
-    value: any
-}) => {
+        add: (params: {
+            namespace: string;
+            key: string | string[];
+            value: any;
+        }) => {
             return this.client.request({
                 method: methods.database.debug.create,
                 params,
             });
         },
 
-        get: (params: {namespace: string, key: string | string[]
-}) => {
+        get: (params: { namespace: string; key: string | string[] }) => {
             return this.client.request({
                 method: methods.database.debug.get,
                 params,
             });
         },
 
-        table: (params: {table: string}) => {
+        table: (params: { table: string }) => {
             return this.client.request({
                 method: methods.database.debug.fetchTable,
                 params,
