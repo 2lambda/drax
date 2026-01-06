@@ -10,5 +10,21 @@
     "peerDependencies": {
         "typescript": "^5"
     },
-    "scripts": {}
+    "scripts": {},
+    "description": "Drax is a javascript library made for interacting with moonraker (primarily with websockets).",
+    "main": "index.js",
+    "dependencies": {
+        "typescript": "^5.9.3",
+        "undici-types": "^7.16.0"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/2lambda/drax.git"
+    },
+    "author": "jerrens",
+    "license": "GPL-3.0-or-later",
+    "bugs": {
+        "url": "https://github.com/2lambda/drax/issues"
+    },
+    "homepage": "https://github.com/2lambda/drax#readme"
 }
