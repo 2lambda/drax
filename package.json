@@ -10,7 +10,5 @@
     "peerDependencies": {
         "typescript": "^5"
     },
-    "scripts": {
-        "prepare": "husky"
-    }
+    "scripts": {}
 }
